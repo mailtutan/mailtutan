@@ -11,7 +11,7 @@ pub async fn serve() {
 
     let app = Router::new()
         .route("/", get(handler))
-        .route("/version", get(version::version_handler));
+        .route("/version", get(version::show));
 
     println!("listening on 0.0.0.0:3000");
 
