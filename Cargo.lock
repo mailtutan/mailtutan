@@ -280,6 +280,7 @@ dependencies = [
  "anyhow",
  "async-trait",
  "axum",
+ "lazy_static",
  "rust-smtp-server",
  "serde",
  "serde_json",

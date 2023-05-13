@@ -4,26 +4,20 @@ pub struct MemoryStore {
     records: Vec<Message>,
 }
 
-trait Store {
-    fn list(&self) -> &Vec<Message>;
-    fn new() -> Self;
-    fn add(&mut self, message: Message);
-    fn size(&self) -> usize;
-}
-
-impl Store for MemoryStore {
-    fn new() -> Self {
+impl MemoryStore {
+    pub fn new() -> Self {
         MemoryStore { records: vec![] }
     }
-    fn list(&self) -> &Vec<Message> {
+
+    pub fn list(&self) -> &Vec<Message> {
         &self.records
     }
 
-    fn add(&mut self, message: Message) {
+    pub fn add(&mut self, message: Message) {
         self.records.push(message);
     }
 
-    fn size(&self) -> usize {
+    pub fn size(&self) -> usize {
         self.records.len()
     }
 }
