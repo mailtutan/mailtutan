@@ -1,5 +1,7 @@
 use axum::{response::Html, routing::get, Router};
 
+mod version;
+
 async fn handler() -> Html<&'static str> {
     Html("<h1>Hello, World!</h1>")
 }
@@ -7,7 +9,9 @@ async fn handler() -> Html<&'static str> {
 pub async fn serve() {
     tracing_subscriber::fmt::init();
 
-    let app = Router::new().route("/", get(handler));
+    let app = Router::new()
+        .route("/", get(handler))
+        .route("/version", get(version::version_handler));
 
     println!("listening on 0.0.0.0:3000");
 
