@@ -1,6 +1,7 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use tokio::io::{self, AsyncRead, AsyncReadExt};
+use tokio::runtime::Builder;
 
 use rust_smtp_server::backend::{Backend, MailOptions, Session};
 use rust_smtp_server::server::Server;
@@ -9,6 +10,7 @@ struct MyBackend;
 
 struct MySession;
 
+mod api;
 mod message;
 mod store;
 
@@ -53,8 +55,7 @@ impl Session for MySession {
     }
 }
 
-#[tokio::main]
-async fn main() -> Result<()> {
+async fn serve_smtp_server() {
     let be = MyBackend;
 
     let mut s = Server::new(be);
@@ -69,10 +70,19 @@ async fn main() -> Result<()> {
     s.allow_insecure_auth = true;
 
     println!("Starting server on {}", s.addr);
-    match s.listen_and_serve().await {
-        Ok(_) => println!("Server stopped"),
-        Err(e) => println!("Server error: {}", e),
-    }
+    s.listen_and_serve().await.unwrap();
+}
 
-    Ok(())
+#[tokio::main]
+async fn main() {
+    let runtime = Builder::new_multi_thread().enable_all().build().unwrap();
+
+    let mut tasks = vec![];
+
+    tasks.push(runtime.spawn(api::serve()));
+    tasks.push(runtime.spawn(serve_smtp_server()));
+
+    for task in tasks {
+        task.await.unwrap();
+    }
 }
