@@ -1,5 +1,6 @@
 use axum::{response::Html, routing::get, Router};
 
+mod messages;
 mod version;
 
 async fn handler() -> Html<&'static str> {
@@ -11,7 +12,8 @@ pub async fn serve() {
 
     let app = Router::new()
         .route("/", get(handler))
-        .route("/version", get(version::show));
+        .route("/api/messages", get(messages::index))
+        .route("/api/version", get(version::show));
 
     println!("listening on 0.0.0.0:3000");
 

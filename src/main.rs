@@ -11,7 +11,7 @@ struct MyBackend;
 struct MySession;
 
 mod api;
-mod message;
+mod models;
 mod store;
 
 impl Backend for MyBackend {

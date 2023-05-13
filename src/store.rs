@@ -1,4 +1,4 @@
-use crate::message::Message;
+use crate::models::message::Message;
 
 pub struct MemoryStore {
     records: Vec<Message>,
@@ -30,7 +30,7 @@ impl Store for MemoryStore {
 
 #[cfg(test)]
 mod test {
-    use crate::message::Message;
+    use crate::models::message::Message;
 
     use super::{MemoryStore, Store};
 
