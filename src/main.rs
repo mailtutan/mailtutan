@@ -9,6 +9,9 @@ struct MyBackend;
 
 struct MySession;
 
+mod message;
+mod store;
+
 impl Backend for MyBackend {
     type S = MySession;
 
