@@ -20,13 +20,17 @@ impl MemoryStore {
     pub fn size(&self) -> usize {
         self.records.len()
     }
+
+    pub fn delete_all(&mut self) {
+        self.records.clear()
+    }
 }
 
 #[cfg(test)]
 mod test {
     use crate::models::message::Message;
 
-    use super::{MemoryStore, Store};
+    use super::MemoryStore;
 
     #[test]
     fn test_add_message() {

@@ -13,6 +13,7 @@ pub async fn serve() {
     let app = Router::new()
         .route("/", get(handler))
         .route("/api/messages", get(messages::index))
+        .route("/api/messages/delete_all", get(messages::delete_all))
         .route("/api/version", get(version::show));
 
     println!("listening on 0.0.0.0:3000");
