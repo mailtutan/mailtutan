@@ -12,9 +12,7 @@ use rust_smtp_server::server::Server;
 struct MyBackend;
 
 #[derive(Default)]
-struct MySession {
-    pub message: Message,
-}
+struct MySession {}
 
 mod api;
 mod models;
@@ -44,13 +42,11 @@ impl Session for MySession {
 
     async fn mail(&mut self, from: &str, _: &MailOptions) -> Result<()> {
         println!("mail from: {}", from);
-        self.message.from = from.to_owned();
         Ok(())
     }
 
     async fn rcpt(&mut self, to: &str) -> Result<()> {
         println!("rcpt to: {}", to);
-        self.message.to = to.to_owned();
         Ok(())
     }
 
@@ -58,12 +54,18 @@ impl Session for MySession {
         // print whole message
         let mut data = Vec::new();
         let mut reader = io::BufReader::new(r);
-        reader.read_to_end(&mut data).await?;
-        println!("data: {}", String::from_utf8_lossy(&data));
-        self.message.data = String::from_utf8_lossy(&data).to_string();
 
-        STORAGE.lock().unwrap().add(self.message.clone());
-        // STORAGE.add(self.message);
+        // let mut data = String::new();
+
+        reader.read_to_end(&mut data).await?;
+
+        dbg!(data);
+        // dbg!(String::from_utf8_lossy(&data));
+
+        // dbg!(&data);
+        // dbg!(data.to_string().to);
+
+        // STORAGE.lock().unwrap().add(Message::from(&data));
 
         Ok(())
     }
@@ -84,9 +86,9 @@ async fn serve_smtp_server() {
     s.domain = "mailtutan".to_string();
     s.read_timeout = std::time::Duration::from_secs(10);
     s.write_timeout = std::time::Duration::from_secs(10);
-    s.max_message_bytes = 10 * 1024 * 1024;
-    s.max_recipients = 50;
-    s.max_line_length = 1000;
+    // s.max_message_bytes = 10 * 1024 * 1024;
+    // s.max_recipients = 50;
+    // s.max_line_length = 1000;
     s.allow_insecure_auth = true;
 
     println!("Starting server on {}", s.addr);

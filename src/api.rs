@@ -1,22 +1,20 @@
-use axum::{response::Html, routing::get, Router};
+use axum::{routing::get, Router};
 
+mod assets;
 mod messages;
 mod version;
-
-async fn handler() -> Html<&'static str> {
-    Html("<h1>Hello, World!</h1>")
-}
 
 pub async fn serve() {
     tracing_subscriber::fmt::init();
 
     let app = Router::new()
-        .route("/", get(handler))
+        .route("/", get(assets::index_html))
+        .route("/assets/:name", get(assets::show))
         .route("/api/messages", get(messages::index))
         .route("/api/messages/delete_all", get(messages::delete_all))
         .route("/api/version", get(version::show));
 
-    println!("listening on 0.0.0.0:3000");
+    println!("listening on http://0.0.0.0:3000");
 
     axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
         .serve(app.into_make_service())
