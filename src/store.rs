@@ -1,19 +1,26 @@
 use crate::models::Message;
 
 pub struct MemoryStore {
+    sequence_id: usize,
     records: Vec<Message>,
 }
 
 impl MemoryStore {
     pub fn new() -> Self {
-        MemoryStore { records: vec![] }
+        MemoryStore {
+            records: vec![],
+            sequence_id: 1,
+        }
     }
 
     pub fn list(&self) -> &Vec<Message> {
         &self.records
     }
 
-    pub fn add(&mut self, message: Message) {
+    pub fn add(&mut self, mut message: Message) {
+        message.id = Some(self.sequence_id);
+        self.sequence_id += 1;
+
         dbg!(&message);
         self.records.push(message);
     }

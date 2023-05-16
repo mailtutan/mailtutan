@@ -19,7 +19,7 @@ impl From<&Vec<u8>> for Message {
         Self {
             id: None,
             sender: parsed.headers.get_first_value("From").unwrap_or_default(),
-            recipients: vec![],
+            recipients: parsed.headers.get_all_values("To"),
             subject: parsed
                 .headers
                 .get_first_value("Subject")
