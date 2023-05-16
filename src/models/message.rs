@@ -2,15 +2,6 @@ use mailparse::*;
 use serde::Serialize;
 use std::time::SystemTime;
 
-// id
-// sender
-// recipients
-// subject
-// size
-// type: "text/plan"
-// created_at
-// formats: source,plain, html
-// attachments
 #[derive(Serialize, Debug, Default, Clone)]
 pub struct Message {
     pub id: Option<usize>,
@@ -25,11 +16,9 @@ impl From<&Vec<u8>> for Message {
     fn from(data: &Vec<u8>) -> Self {
         let parsed = parse_mail(data.as_ref()).unwrap();
 
-        // dbg!(&parsed);
-
         Self {
             id: None,
-            sender: "".to_owned(),
+            sender: parsed.headers.get_first_value("From").unwrap_or_default(),
             recipients: vec![],
             subject: parsed
                 .headers

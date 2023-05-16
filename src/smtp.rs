@@ -1,5 +1,5 @@
+use crate::{models::Message, STORAGE};
 use mailin_embedded::{Handler, Server, SslConfig};
-use mailparse::*;
 use std::io;
 
 #[derive(Clone)]
@@ -15,15 +15,9 @@ impl Handler for MyHandler {
     }
 
     fn data_end(&mut self) -> mailin_embedded::Response {
-        dbg!("we got the data");
-        // dbg!(&self.data.to_);
-        // dbg!(std::str::from_utf8(&self.data));
-        // SmtpParser.parse(&self.data, &SmtpContext::default());
+        let message = Message::from(&self.data);
 
-        let parsed = parse_mail(&self.data).unwrap();
-        dbg!(parsed.headers.get_first_value("Subject"));
-        dbg!(parsed.subparts.len());
-        dbg!(parsed.get_body());
+        STORAGE.lock().unwrap().add(message);
 
         mailin_embedded::response::OK
     }

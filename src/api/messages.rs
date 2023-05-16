@@ -1,4 +1,4 @@
-use crate::{models::message::Message, STORAGE};
+use crate::{models::Message, STORAGE};
 use axum::response::Html;
 use axum::Json;
 

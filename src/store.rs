@@ -1,4 +1,4 @@
-use crate::models::message::Message;
+use crate::models::Message;
 
 pub struct MemoryStore {
     records: Vec<Message>,
