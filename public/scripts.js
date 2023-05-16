@@ -330,7 +330,7 @@
         messageRow = $("#messages tbody tr[data-message-id='" + id + "']");
         messageRow.addClass("selected");
         this.scrollToRow(messageRow);
-        return $.getJSON("messages/" + id + ".json", (function(_this) {
+        return $.getJSON("/api/messages/" + id + "/json", (function(_this) {
           return function(message) {
             var $ul;
             $("#message .metadata dd.created_at").text(_this.formatDate(message.created_at));

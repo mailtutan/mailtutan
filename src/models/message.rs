@@ -10,6 +10,7 @@ pub struct Message {
     pub subject: String,
     pub created_at: Option<String>,
     pub attachments: Vec<String>,
+    pub source: Vec<u8>,
 }
 
 impl From<&Vec<u8>> for Message {
@@ -26,6 +27,7 @@ impl From<&Vec<u8>> for Message {
                 .unwrap_or_default(),
             created_at: Some(Utc::now().to_rfc3339()),
             attachments: vec![],
+            source: data.to_owned(),
         }
     }
 }

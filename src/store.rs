@@ -20,11 +20,14 @@ impl MemoryStore {
     pub fn add(&mut self, mut message: Message) {
         message.id = Some(self.sequence_id);
         self.sequence_id += 1;
-
-        dbg!(&message);
         self.records.push(message);
     }
 
+    pub fn get(&self, item: usize) -> &Message {
+        &self.records.get(item - 1).unwrap()
+    }
+
+    #[allow(dead_code)]
     pub fn size(&self) -> usize {
         self.records.len()
     }
