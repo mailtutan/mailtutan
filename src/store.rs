@@ -36,22 +36,22 @@ impl MemoryStore {
 
 #[cfg(test)]
 mod test {
-    use crate::models::message::Message;
+    use crate::models::Message;
 
     use super::MemoryStore;
 
-    // #[test]
-    // fn test_add_message() {
-    //     let mut store = MemoryStore::new();
-    //     store.records.len();
-    //     store.add(Message {
-    //         sender: "mosi".to_owned(),
-    //         to: "tala".to_owned(),
-    //         data: "something".to_owned(),
-    //         subject: "something".to_owned(),
-    //     });
-    //
-    //     assert_eq!(store.size(), 1);
-    //     assert_eq!(store.list().len(), 1);
-    // }
+    #[test]
+    fn test_add_message() {
+        let mut store = MemoryStore::new();
+        store.records.len();
+        store.add(Message {
+            sender: "mosi".to_owned(),
+            recipients: ["felan".to_owned()].to_vec(),
+            subject: "something".to_owned(),
+            ..Default::default()
+        });
+
+        assert_eq!(store.size(), 1);
+        assert_eq!(store.list().len(), 1);
+    }
 }
