@@ -399,16 +399,16 @@
     };
 
     MailCatcher.prototype.refresh = function() {
-      // return $.getJSON("messages", (function(_this) {
-      //   return function(messages) {
-      //     $.each(messages, function(i, message) {
-      //       if (!_this.haveMessage(message)) {
-      //         return _this.addMessage(message);
-      //       }
-      //     });
-      //     return _this.updateMessagesCount();
-      //   };
-      // })(this));
+      return $.getJSON("/api/messages", (function(_this) {
+        return function(messages) {
+          $.each(messages, function(i, message) {
+            if (!_this.haveMessage(message)) {
+              return _this.addMessage(message);
+            }
+          });
+          return _this.updateMessagesCount();
+        };
+      })(this));
     };
 
     MailCatcher.prototype.subscribe = function() {

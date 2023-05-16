@@ -1,6 +1,6 @@
+use chrono::Utc;
 use mailparse::*;
 use serde::Serialize;
-use std::time::SystemTime;
 
 #[derive(Serialize, Debug, Default, Clone)]
 pub struct Message {
@@ -8,7 +8,7 @@ pub struct Message {
     pub sender: String,
     pub recipients: Vec<String>,
     pub subject: String,
-    pub created_at: Option<SystemTime>,
+    pub created_at: Option<String>,
     pub attachments: Vec<String>,
 }
 
@@ -24,7 +24,7 @@ impl From<&Vec<u8>> for Message {
                 .headers
                 .get_first_value("Subject")
                 .unwrap_or_default(),
-            created_at: None,
+            created_at: Some(Utc::now().to_rfc3339()),
             attachments: vec![],
         }
     }
