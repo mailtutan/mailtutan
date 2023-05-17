@@ -17,7 +17,7 @@ pub async fn show_source(Path(id): Path<usize>) -> impl IntoResponse {
     )
 }
 
-pub async fn show_plain(Path(id): Path<usize>) -> impl IntoResponse {
+pub async fn show_plain(Path(_id): Path<usize>) -> impl IntoResponse {
     (
         StatusCode::OK,
         [("Content-Type", "text/plain;charset=utf-8")],
