@@ -12,9 +12,12 @@ pub struct Message {
     pub subject: String,
     pub created_at: Option<String>,
     pub attachments: Vec<String>,
+    #[serde(skip_serializing)]
     pub source: Vec<u8>,
     pub formats: Vec<String>,
+    #[serde(skip_serializing)]
     pub html: Option<String>,
+    #[serde(skip_serializing)]
     pub plain: Option<String>,
 }
 
