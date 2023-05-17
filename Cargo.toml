@@ -20,3 +20,8 @@ mailparse = "0.14.0"
 mailin-embedded = "0.8.0"
 chrono = "0.4.24"
 futures = "0.3.28"
+
+[profile.release]
+opt-level = 'z'
+lto = true
+strip = true
