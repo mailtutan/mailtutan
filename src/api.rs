@@ -1,4 +1,4 @@
-use axum::{routing::get, Router};
+use axum::{routing::delete, routing::get, Router};
 
 mod assets;
 mod messages;
@@ -15,7 +15,7 @@ pub async fn serve() {
         .route("/api/messages", get(messages::index))
         .route("/api/messages/:id/source", get(messages::show_source))
         .route("/api/messages/:id/json", get(messages::show_json))
-        .route("/api/messages/delete_all", get(messages::delete_all))
+        .route("/api/messages", delete(messages::delete_all))
         .route("/api/version", get(version::show));
 
     println!("listening on http://0.0.0.0:3000");

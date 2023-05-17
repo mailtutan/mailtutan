@@ -65,7 +65,7 @@
           e.preventDefault();
           if (confirm("You will lose all your received messages.\n\nAre you sure you want to clear all messages?")) {
             return $.ajax({
-              url: new URL("messages", document.baseURI).toString(),
+              url: new URL("/api/messages", document.baseURI).toString(),
               type: "DELETE",
               success: function() {
                 return _this.clearMessages();
