@@ -413,8 +413,7 @@
 
     MailCatcher.prototype.subscribe = function() {
       if (typeof WebSocket !== "undefined" && WebSocket !== null) {
-        // TODO: Websocket here
-        // return this.subscribeWebSocket();
+        return this.subscribeWebSocket();
       } else {
         return this.subscribePoll();
       }
@@ -423,7 +422,7 @@
     MailCatcher.prototype.subscribeWebSocket = function() {
       var secure, url;
       secure = window.location.protocol === "https:";
-      url = new URL("messages", document.baseURI);
+      url = new URL("ws", document.baseURI);
       url.protocol = secure ? "wss" : "ws";
       this.websocket = new WebSocket(url.toString());
       return this.websocket.onmessage = (function(_this) {

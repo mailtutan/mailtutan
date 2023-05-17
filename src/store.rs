@@ -1,4 +1,7 @@
-use crate::models::Message;
+use crate::{
+    models::{Message, MessageEvent},
+    WEBSOCKET_TX,
+};
 
 pub struct MemoryStore {
     sequence_id: usize,
@@ -17,10 +20,23 @@ impl MemoryStore {
         &self.records
     }
 
-    pub fn add(&mut self, mut message: Message) {
+    pub fn add(&mut self, mut message: Message) -> usize {
         message.id = Some(self.sequence_id);
+
         self.sequence_id += 1;
+
+        let event = MessageEvent {
+            event_type: "add".to_owned(),
+            message: message.clone(),
+        };
+
+        WEBSOCKET_TX
+            .clone()
+            .send(serde_json::to_string(&event).unwrap());
+
         self.records.push(message);
+
+        self.sequence_id
     }
 
     pub fn get(&self, item: usize) -> &Message {

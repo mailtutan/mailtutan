@@ -13,6 +13,13 @@ pub struct Message {
     pub source: Vec<u8>,
 }
 
+#[derive(Serialize, Debug, Default, Clone)]
+pub struct MessageEvent {
+    #[serde(rename = "type")]
+    pub event_type: String,
+    pub message: Message,
+}
+
 impl From<&Vec<u8>> for Message {
     fn from(data: &Vec<u8>) -> Self {
         let parsed = parse_mail(data.as_ref()).unwrap();
