@@ -1,3 +1,5 @@
+use std::todo;
+
 use chrono::Utc;
 use mailparse::*;
 use serde::Serialize;
@@ -12,6 +14,8 @@ pub struct Message {
     pub attachments: Vec<String>,
     pub source: Vec<u8>,
     pub formats: Vec<String>,
+    pub html: Option<String>,
+    pub plain: Option<String>,
 }
 
 #[derive(Serialize, Debug, Default, Clone)]
@@ -25,6 +29,24 @@ impl From<&Vec<u8>> for Message {
     fn from(data: &Vec<u8>) -> Self {
         let parsed = parse_mail(data.as_ref()).unwrap();
 
+        let mut formats = vec![];
+        let mut html: Option<String> = None;
+        let mut plain: Option<String> = None;
+
+        for part in parsed.subparts {
+            match part.ctype.mimetype.as_ref() {
+                "text/html" => {
+                    formats.push("html".to_owned());
+                    html = part.get_body().ok();
+                }
+                "text/plain" => {
+                    formats.push("plain".to_owned());
+                    plain = part.get_body().ok();
+                }
+                _ => todo!(),
+            }
+        }
+
         Self {
             id: None,
             sender: parsed.headers.get_first_value("From").unwrap_or_default(),
@@ -36,7 +58,9 @@ impl From<&Vec<u8>> for Message {
             created_at: Some(Utc::now().to_rfc3339()),
             attachments: vec![],
             source: data.to_owned(),
-            formats: vec!["source".to_owned(), "plain".to_owned()],
+            formats: formats,
+            html: html,
+            plain: plain,
         }
     }
 }

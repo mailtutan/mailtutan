@@ -17,11 +17,33 @@ pub async fn show_source(Path(id): Path<usize>) -> impl IntoResponse {
     )
 }
 
-pub async fn show_plain(Path(_id): Path<usize>) -> impl IntoResponse {
+pub async fn show_plain(Path(id): Path<usize>) -> impl IntoResponse {
     (
         StatusCode::OK,
         [("Content-Type", "text/plain;charset=utf-8")],
-        "PLACE HOLDER".to_owned(),
+        STORAGE
+            .lock()
+            .unwrap()
+            .get(id)
+            .plain
+            .as_ref()
+            .unwrap()
+            .clone(),
+    )
+}
+
+pub async fn show_html(Path(id): Path<usize>) -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        [("Content-Type", "text/html;charset=utf-8")],
+        STORAGE
+            .lock()
+            .unwrap()
+            .get(id)
+            .html
+            .as_ref()
+            .unwrap()
+            .clone(),
     )
 }
 

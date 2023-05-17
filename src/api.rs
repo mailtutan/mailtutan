@@ -15,6 +15,7 @@ pub async fn serve() {
         .route("/api/messages", get(messages::index))
         .route("/api/messages/:id/source", get(messages::show_source))
         .route("/api/messages/:id/plain", get(messages::show_plain))
+        .route("/api/messages/:id/html", get(messages::show_html))
         .route("/api/messages/:id/json", get(messages::show_json))
         .route("/api/messages/:id/eml", get(messages::show_eml))
         .route("/api/messages", delete(messages::delete_all))
