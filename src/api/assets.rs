@@ -18,7 +18,7 @@ pub async fn show(Path(name): Path<String>) -> impl IntoResponse {
     (
         StatusCode::OK,
         [("Content-Type", content_type)],
-        fs::read_to_string(file_path).unwrap(),
+        fs::read(file_path).unwrap(),
     )
 }
 
