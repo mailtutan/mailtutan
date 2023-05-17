@@ -361,7 +361,7 @@
             } else {
               $("#message .metadata .attachments").hide();
             }
-            $("#message .views .download a").attr("href", "messages/" + id + ".eml");
+            $("#message .views .download a").attr("href", "/api/messages/" + id + "/eml");
             return _this.loadMessageBody();
           };
         })(this));

@@ -1,6 +1,8 @@
 use crate::{models::Message, STORAGE};
 use axum::extract::Path;
+use axum::http::StatusCode;
 use axum::response::Html;
+use axum::response::IntoResponse;
 use axum::Json;
 
 pub async fn index() -> Json<Vec<Message>> {
@@ -9,6 +11,14 @@ pub async fn index() -> Json<Vec<Message>> {
 
 pub async fn show_source(Path(id): Path<usize>) -> Html<Vec<u8>> {
     Html(STORAGE.lock().unwrap().get(id).source.clone())
+}
+
+pub async fn show_eml(Path(id): Path<usize>) -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        [("Content-Type", "message/rfc822")],
+        STORAGE.lock().unwrap().get(id).source.clone(),
+    )
 }
 
 pub async fn show_json(Path(id): Path<usize>) -> Json<Message> {
