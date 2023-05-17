@@ -9,10 +9,13 @@ pub async fn index() -> Json<Vec<Message>> {
     Json(STORAGE.lock().unwrap().list().to_vec())
 }
 
-pub async fn show_source(Path(id): Path<usize>) -> Html<Vec<u8>> {
-    Html(STORAGE.lock().unwrap().get(id).source.clone())
+pub async fn show_source(Path(id): Path<usize>) -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        [("Content-Type", "text/plain;charset=utf-8")],
+        STORAGE.lock().unwrap().get(id).source.clone(),
+    )
 }
-
 pub async fn show_eml(Path(id): Path<usize>) -> impl IntoResponse {
     (
         StatusCode::OK,

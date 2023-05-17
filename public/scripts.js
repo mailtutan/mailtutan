@@ -146,7 +146,7 @@
           id = _this.selectedMessage();
           if (id != null) {
             $.ajax({
-              url: new URL("messages/" + id, document.baseURI).toString(),
+              url: new URL("/api/messages/" + id, document.baseURI).toString(),
               type: "DELETE",
               success: function() {
                 return _this.removeMessage(id);
@@ -342,7 +342,7 @@
               $el = $(el);
               format = $el.attr("data-message-format");
               if ($.inArray(format, message.formats) >= 0) {
-                $el.find("a").attr("href", "messages/" + id + "." + format);
+                $el.find("a").attr("href", "/api/messages/" + id + "/" + format);
                 return $el.show();
               } else {
                 return $el.hide();
@@ -355,7 +355,7 @@
             if (message.attachments.length) {
               $ul = $("<ul/>").appendTo($("#message .metadata dd.attachments").empty());
               $.each(message.attachments, function(i, attachment) {
-                return $ul.append($("<li>").append($("<a>").attr("href", "messages/" + id + "/parts/" + attachment["cid"]).addClass(attachment["type"].split("/", 1)[0]).addClass(attachment["type"].replace("/", "-")).text(attachment["filename"])));
+                return $ul.append($("<li>").append($("<a>").attr("href", "/api/messages/" + id + "/parts/" + attachment["cid"]).addClass(attachment["type"].split("/", 1)[0]).addClass(attachment["type"].replace("/", "-")).text(attachment["filename"])));
               });
               $("#message .metadata .attachments").show();
             } else {
@@ -375,7 +375,7 @@
       $("#message .views .tab[data-message-format=\"" + format + "\"]:not(.selected)").addClass("selected");
       $("#message .views .tab:not([data-message-format=\"" + format + "\"]).selected").removeClass("selected");
       if (id != null) {
-        return $("#message iframe").attr("src", "messages/" + id + "." + format);
+        return $("#message iframe").attr("src", "/api/messages/" + id + "/" + format);
       }
     };
 

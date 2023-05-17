@@ -11,6 +11,7 @@ pub struct Message {
     pub created_at: Option<String>,
     pub attachments: Vec<String>,
     pub source: Vec<u8>,
+    pub formats: Vec<String>,
 }
 
 #[derive(Serialize, Debug, Default, Clone)]
@@ -35,6 +36,7 @@ impl From<&Vec<u8>> for Message {
             created_at: Some(Utc::now().to_rfc3339()),
             attachments: vec![],
             source: data.to_owned(),
+            formats: vec!["source".to_owned(), "plain".to_owned()],
         }
     }
 }
