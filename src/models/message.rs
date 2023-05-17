@@ -32,11 +32,24 @@ impl From<&Vec<u8>> for Message {
     fn from(data: &Vec<u8>) -> Self {
         let parsed = parse_mail(data.as_ref()).unwrap();
 
+        let sender = parsed.headers.get_first_value("From").unwrap_or_default();
+        let recipients = parsed.headers.get_all_values("To");
+        let subject = parsed
+            .headers
+            .get_first_value("Subject")
+            .unwrap_or_default();
+
         let mut formats = vec![];
         let mut html: Option<String> = None;
         let mut plain: Option<String> = None;
 
-        for part in parsed.subparts {
+        let parts: Vec<ParsedMail> = if parsed.subparts.len() > 0 {
+            parsed.subparts
+        } else {
+            vec![parsed]
+        };
+
+        for part in parts {
             match part.ctype.mimetype.as_ref() {
                 "text/html" => {
                     formats.push("html".to_owned());
@@ -52,12 +65,9 @@ impl From<&Vec<u8>> for Message {
 
         Self {
             id: None,
-            sender: parsed.headers.get_first_value("From").unwrap_or_default(),
-            recipients: parsed.headers.get_all_values("To"),
-            subject: parsed
-                .headers
-                .get_first_value("Subject")
-                .unwrap_or_default(),
+            sender: sender,
+            recipients: recipients,
+            subject: subject,
             created_at: Some(Utc::now().to_rfc3339()),
             attachments: vec![],
             source: data.to_owned(),
