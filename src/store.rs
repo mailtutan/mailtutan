@@ -32,7 +32,8 @@ impl MemoryStore {
 
         WEBSOCKET_TX
             .clone()
-            .send(serde_json::to_string(&event).unwrap());
+            .send(serde_json::to_string(&event).unwrap())
+            .unwrap();
 
         self.records.push(message);
 

@@ -16,8 +16,7 @@ pub async fn serve() {
         .route("/api/messages/:id/source", get(messages::show_source))
         .route("/api/messages/:id/json", get(messages::show_json))
         .route("/api/messages/delete_all", get(messages::delete_all))
-        .route("/api/version", get(version::show))
-        .with_state(websocket::state());
+        .route("/api/version", get(version::show));
 
     println!("listening on http://0.0.0.0:3000");
 

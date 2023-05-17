@@ -8,11 +8,11 @@ mod store;
 
 use std::sync::Mutex;
 use tokio::runtime::Builder;
-use tokio::sync::broadcast::{self, Receiver, Sender};
+use tokio::sync::broadcast::{self, Sender};
 
 lazy_static! {
     static ref STORAGE: Mutex<store::MemoryStore> = Mutex::new(store::MemoryStore::new());
-    static ref WEBSOCKET_TX: Sender<String> = { broadcast::channel(100).0 };
+    static ref WEBSOCKET_TX: Sender<String> = broadcast::channel(100).0;
 }
 
 #[tokio::main]
