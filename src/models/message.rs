@@ -11,7 +11,7 @@ pub struct Message {
     pub recipients: Vec<String>,
     pub subject: String,
     pub created_at: Option<String>,
-    pub attachments: Vec<String>,
+    pub attachments: Vec<Attachment>,
     #[serde(skip_serializing)]
     pub source: Vec<u8>,
     pub formats: Vec<String>,
@@ -28,6 +28,16 @@ pub struct MessageEvent {
     pub message: Message,
 }
 
+#[derive(Serialize, Debug, Default, Clone)]
+pub struct Attachment {
+    pub cid: String,
+    #[serde(rename = "type")]
+    pub file_type: String,
+    pub filename: String,
+    #[serde(skip_serializing)]
+    pub body: Vec<u8>,
+}
+
 impl From<&Vec<u8>> for Message {
     fn from(data: &Vec<u8>) -> Self {
         let parsed = parse_mail(data.as_ref()).unwrap();
@@ -42,6 +52,7 @@ impl From<&Vec<u8>> for Message {
         let mut formats = vec![];
         let mut html: Option<String> = None;
         let mut plain: Option<String> = None;
+        let mut attachments: Vec<Attachment> = vec![];
 
         let parts: Vec<ParsedMail> = if parsed.subparts.len() > 0 {
             parsed.subparts
@@ -50,30 +61,47 @@ impl From<&Vec<u8>> for Message {
         };
 
         for part in parts {
-            match part.ctype.mimetype.as_ref() {
-                "text/html" => {
-                    formats.push("html".to_owned());
-                    html = part.get_body().ok();
+            if part.get_content_disposition().disposition == DispositionType::Attachment {
+                let mut attachment = Attachment::default();
+
+                attachment.file_type = part.ctype.mimetype.clone();
+                attachment.filename = part
+                    .get_content_disposition()
+                    .params
+                    .get("filename")
+                    .unwrap()
+                    .clone();
+
+                attachment.body = part.get_body_raw().unwrap();
+                attachment.cid = part.headers.get_first_value("Content-ID").unwrap();
+
+                attachments.push(attachment);
+            } else {
+                match part.ctype.mimetype.as_ref() {
+                    "text/html" => {
+                        formats.push("html".to_owned());
+                        html = part.get_body().ok();
+                    }
+                    "text/plain" => {
+                        formats.push("plain".to_owned());
+                        plain = part.get_body().ok();
+                    }
+                    _ => todo!(),
                 }
-                "text/plain" => {
-                    formats.push("plain".to_owned());
-                    plain = part.get_body().ok();
-                }
-                _ => todo!(),
             }
         }
 
         Self {
             id: None,
-            sender: sender,
-            recipients: recipients,
-            subject: subject,
+            sender,
+            recipients,
+            subject,
             created_at: Some(Utc::now().to_rfc3339()),
-            attachments: vec![],
+            attachments,
             source: data.to_owned(),
-            formats: formats,
-            html: html,
-            plain: plain,
+            formats,
+            html,
+            plain,
         }
     }
 }

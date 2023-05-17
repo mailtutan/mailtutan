@@ -55,6 +55,20 @@ pub async fn show_eml(Path(id): Path<usize>) -> impl IntoResponse {
     )
 }
 
+pub async fn download_attachment(Path((id, cid)): Path<(usize, String)>) -> impl IntoResponse {
+    for attachment in &STORAGE.lock().unwrap().get(id).attachments {
+        if attachment.cid == cid {
+            return (
+                StatusCode::OK,
+                [("Content-Disposition", "attachment; filename=\"attachment\"")],
+                attachment.body.clone(),
+            );
+        }
+    }
+
+    (StatusCode::OK, [("Content-Type", "message/rfc822")], vec![])
+}
+
 pub async fn show_json(Path(id): Path<usize>) -> Json<Message> {
     Json(STORAGE.lock().unwrap().get(id).clone())
 }
