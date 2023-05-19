@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate lazy_static;
-
 use mailtutan::*;
 
 use tokio::runtime::Builder;
