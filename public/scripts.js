@@ -1,5 +1,5 @@
 (function() {
-  var MailCatcher,
+  var MailTutan,
     bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   jQuery.expr.pseudos.icontains = function(a, i, m) {
@@ -7,8 +7,8 @@
     return ((ref = (ref1 = a.textContent) != null ? ref1 : a.innerText) != null ? ref : "").toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
   };
 
-  MailCatcher = (function() {
-    function MailCatcher() {
+  MailTutan = (function() {
+    function MailTutan() {
       this.nextTab = bind(this.nextTab, this);
       this.previousTab = bind(this.previousTab, this);
       this.openTab = bind(this.openTab, this);
@@ -163,23 +163,23 @@
       this.subscribe();
     }
 
-    MailCatcher.prototype.parseDateRegexp = /^(\d{4})[-\/\\](\d{2})[-\/\\](\d{2})(?:\s+|T)(\d{2})[:-](\d{2})[:-](\d{2})(?:([ +-]\d{2}:\d{2}|\s*\S+|Z?))?$/;
+    MailTutan.prototype.parseDateRegexp = /^(\d{4})[-\/\\](\d{2})[-\/\\](\d{2})(?:\s+|T)(\d{2})[:-](\d{2})[:-](\d{2})(?:([ +-]\d{2}:\d{2}|\s*\S+|Z?))?$/;
 
-    MailCatcher.prototype.parseDate = function(date) {
+    MailTutan.prototype.parseDate = function(date) {
       var match;
       if (match = this.parseDateRegexp.exec(date)) {
         return new Date(match[1], match[2] - 1, match[3], match[4], match[5], match[6], 0);
       }
     };
 
-    MailCatcher.prototype.offsetTimeZone = function(date) {
+    MailTutan.prototype.offsetTimeZone = function(date) {
       var offset;
       offset = Date.now().getTimezoneOffset() * 60000;
       date.setTime(date.getTime() - offset);
       return date;
     };
 
-    MailCatcher.prototype.formatDate = function(date) {
+    MailTutan.prototype.formatDate = function(date) {
       if (typeof date === "string") {
         date && (date = this.parseDate(date));
       }
@@ -187,32 +187,32 @@
       return date && (date = date.toString("dddd, d MMM yyyy h:mm:ss tt"));
     };
 
-    MailCatcher.prototype.messagesCount = function() {
+    MailTutan.prototype.messagesCount = function() {
       return $("#messages tr").length - 1;
     };
 
-    MailCatcher.prototype.updateMessagesCount = function() {
+    MailTutan.prototype.updateMessagesCount = function() {
       this.favcount.set(this.messagesCount());
-      return document.title = 'MailCatcher (' + this.messagesCount() + ')';
+      return document.title = 'MailTutan (' + this.messagesCount() + ')';
     };
 
-    MailCatcher.prototype.tabs = function() {
+    MailTutan.prototype.tabs = function() {
       return $("#message ul").children(".tab");
     };
 
-    MailCatcher.prototype.getTab = function(i) {
+    MailTutan.prototype.getTab = function(i) {
       return $(this.tabs()[i]);
     };
 
-    MailCatcher.prototype.selectedTab = function() {
+    MailTutan.prototype.selectedTab = function() {
       return this.tabs().index($("#message li.tab.selected"));
     };
 
-    MailCatcher.prototype.openTab = function(i) {
+    MailTutan.prototype.openTab = function(i) {
       return this.getTab(i).children("a").click();
     };
 
-    MailCatcher.prototype.previousTab = function(tab) {
+    MailTutan.prototype.previousTab = function(tab) {
       var i;
       i = tab || tab === 0 ? tab : this.selectedTab() - 1;
       if (i < 0) {
@@ -225,7 +225,7 @@
       }
     };
 
-    MailCatcher.prototype.nextTab = function(tab) {
+    MailTutan.prototype.nextTab = function(tab) {
       var i;
       i = tab ? tab : this.selectedTab() + 1;
       if (i > this.tabs().length - 1) {
@@ -238,18 +238,18 @@
       }
     };
 
-    MailCatcher.prototype.haveMessage = function(message) {
+    MailTutan.prototype.haveMessage = function(message) {
       if (message.id != null) {
         message = message.id;
       }
       return $("#messages tbody tr[data-message-id=\"" + message + "\"]").length > 0;
     };
 
-    MailCatcher.prototype.selectedMessage = function() {
+    MailTutan.prototype.selectedMessage = function() {
       return $("#messages tr.selected").data("message-id");
     };
 
-    MailCatcher.prototype.searchMessages = function(query) {
+    MailTutan.prototype.searchMessages = function(query) {
       var $rows, selector, token;
       selector = ((function() {
         var j, len, ref, results;
@@ -266,16 +266,16 @@
       return $rows.filter(selector).show();
     };
 
-    MailCatcher.prototype.clearSearch = function() {
+    MailTutan.prototype.clearSearch = function() {
       return $("#messages tbody tr").show();
     };
 
-    MailCatcher.prototype.addMessage = function(message) {
+    MailTutan.prototype.addMessage = function(message) {
       $("<tr />").attr("data-message-id", message.id.toString()).append($("<td/>").text(message.sender || "No sender").toggleClass("blank", !message.sender)).append($("<td/>").text((message.recipients || []).join(", ") || "No receipients").toggleClass("blank", !message.recipients.length)).append($("<td/>").text(message.subject || "No subject").toggleClass("blank", !message.subject)).append($("<td/>").text(this.formatDate(message.created_at))).prependTo($("#messages tbody"));
       return this.updateMessagesCount();
     };
 
-    MailCatcher.prototype.removeMessage = function(id) {
+    MailTutan.prototype.removeMessage = function(id) {
       var isSelected, messageRow, switchTo;
       messageRow = $("#messages tbody tr[data-message-id=\"" + id + "\"]");
       isSelected = messageRow.is(".selected");
@@ -293,13 +293,13 @@
       return this.updateMessagesCount();
     };
 
-    MailCatcher.prototype.clearMessages = function() {
+    MailTutan.prototype.clearMessages = function() {
       $("#messages tbody tr").remove();
       this.unselectMessage();
       return this.updateMessagesCount();
     };
 
-    MailCatcher.prototype.scrollToRow = function(row) {
+    MailTutan.prototype.scrollToRow = function(row) {
       var overflow, relativePosition;
       relativePosition = row.offset().top - $("#messages").offset().top;
       if (relativePosition < 0) {
@@ -312,14 +312,14 @@
       }
     };
 
-    MailCatcher.prototype.unselectMessage = function() {
+    MailTutan.prototype.unselectMessage = function() {
       $("#messages tbody, #message .metadata dd").empty();
       $("#message .metadata .attachments").hide();
       $("#message iframe").attr("src", "about:blank");
       return null;
     };
 
-    MailCatcher.prototype.loadMessage = function(id) {
+    MailTutan.prototype.loadMessage = function(id) {
       var messageRow;
       if ((id != null ? id.id : void 0) != null) {
         id = id.id;
@@ -368,7 +368,7 @@
       }
     };
 
-    MailCatcher.prototype.loadMessageBody = function(id, format) {
+    MailTutan.prototype.loadMessageBody = function(id, format) {
       id || (id = this.selectedMessage());
       format || (format = $("#message .views .tab.format.selected").attr("data-message-format"));
       format || (format = "html");
@@ -379,7 +379,7 @@
       }
     };
 
-    MailCatcher.prototype.decorateMessageBody = function() {
+    MailTutan.prototype.decorateMessageBody = function() {
       var body, format, message_iframe, text;
       format = $("#message .views .tab.format.selected").attr("data-message-format");
       switch (format) {
@@ -398,7 +398,7 @@
       }
     };
 
-    MailCatcher.prototype.refresh = function() {
+    MailTutan.prototype.refresh = function() {
       return $.getJSON("/api/messages", (function(_this) {
         return function(messages) {
           $.each(messages, function(i, message) {
@@ -411,7 +411,7 @@
       })(this));
     };
 
-    MailCatcher.prototype.subscribe = function() {
+    MailTutan.prototype.subscribe = function() {
       if (typeof WebSocket !== "undefined" && WebSocket !== null) {
         return this.subscribeWebSocket();
       } else {
@@ -419,7 +419,7 @@
       }
     };
 
-    MailCatcher.prototype.subscribeWebSocket = function() {
+    MailTutan.prototype.subscribeWebSocket = function() {
       var secure, url;
       secure = window.location.protocol === "https:";
       url = new URL("ws", document.baseURI);
@@ -436,14 +436,14 @@
           } else if (data.type === "clear") {
             return _this.clearMessages();
           } else if (data.type === "quit" && !_this.quitting) {
-            alert("MailCatcher has been quit");
+            alert("MailTutan has been quit");
             return _this.hasQuit();
           }
         };
       })(this);
     };
 
-    MailCatcher.prototype.subscribePoll = function() {
+    MailTutan.prototype.subscribePoll = function() {
       if (this.refreshInterval == null) {
         return this.refreshInterval = setInterval(((function(_this) {
           return function() {
@@ -453,9 +453,9 @@
       }
     };
 
-    MailCatcher.prototype.resizeToSavedKey = "mailcatcherSeparatorHeight";
+    MailTutan.prototype.resizeToSavedKey = "mailcatcherSeparatorHeight";
 
-    MailCatcher.prototype.resizeTo = function(height) {
+    MailTutan.prototype.resizeTo = function(height) {
       var ref;
       $("#messages").css({
         height: height - $("#messages").offset().top
@@ -463,7 +463,7 @@
       return (ref = window.localStorage) != null ? ref.setItem(this.resizeToSavedKey, height) : void 0;
     };
 
-    MailCatcher.prototype.resizeToSaved = function() {
+    MailTutan.prototype.resizeToSaved = function() {
       var height, ref;
       height = parseInt((ref = window.localStorage) != null ? ref.getItem(this.resizeToSavedKey) : void 0);
       if (!isNaN(height)) {
@@ -471,16 +471,16 @@
       }
     };
 
-    MailCatcher.prototype.hasQuit = function() {
+    MailTutan.prototype.hasQuit = function() {
       return location.assign($("body > header h1 a").attr("href"));
     };
 
-    return MailCatcher;
+    return MailTutan;
 
   })();
 
   $(function() {
-    return window.MailCatcher = new MailCatcher;
+    return window.MailTutan = new MailTutan;
   });
 
 }).call(this);
