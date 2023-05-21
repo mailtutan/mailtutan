@@ -31,7 +31,7 @@ pub async fn serve() {
         .with_name("example.com")
         .with_ssl(SslConfig::None)
         .unwrap()
-        .with_addr("127.0.0.1:2525")
+        .with_addr("127.0.0.1:1025")
         .unwrap();
 
     server.serve().unwrap();

@@ -25,9 +25,9 @@ pub async fn serve() {
         .route("/api/messages", delete(messages::delete_all))
         .route("/api/version", get(version::show));
 
-    println!("listening on http://0.0.0.0:3000");
+    println!("listening on http://0.0.0.0:1080");
 
-    axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
+    axum::Server::bind(&"0.0.0.0:1080".parse().unwrap())
         .serve(app.into_make_service())
         .await
         .unwrap();
