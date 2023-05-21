@@ -10,3 +10,6 @@ build:
 
 build-web:
 	(cd mailtutan-web && trunk build)
+
+trunk:
+	(cd mailtutan-web && trunk serve --proxy-backend="http://localhost:1080/api/")
