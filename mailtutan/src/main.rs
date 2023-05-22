@@ -12,15 +12,15 @@ use tokio::sync::broadcast;
 async fn main() {
     let runtime = Builder::new_multi_thread().enable_all().build().unwrap();
 
-    let storage = Arc::new(Connection {
+    let conn = Arc::new(Connection {
         storage: Mutex::new(Box::new(Memory::new())),
         ws_sender: broadcast::channel(100).0,
     });
 
     let mut tasks = vec![];
 
-    tasks.push(runtime.spawn(api::serve(storage.clone())));
-    tasks.push(runtime.spawn(smtp::serve(storage.clone())));
+    tasks.push(runtime.spawn(api::serve(conn.clone())));
+    tasks.push(runtime.spawn(smtp::serve(conn.clone())));
 
     for task in tasks {
         task.await.unwrap();

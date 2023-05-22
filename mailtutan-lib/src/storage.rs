@@ -10,7 +10,6 @@ pub trait Storage: Sync + Send {
     fn delete_all(&mut self);
 }
 
-// #[derive(Clone)]
 pub struct Connection {
     pub storage: Mutex<Box<dyn Storage + 'static>>,
     pub ws_sender: Sender<String>,
