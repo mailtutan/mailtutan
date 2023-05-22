@@ -19,8 +19,3 @@ mailin-embedded = "0.8.0"
 chrono = "0.4.24"
 futures = "0.3.28"
 mailtutan-lib = { path = "../mailtutan-lib" }
-
-[profile.release]
-opt-level = 'z'
-lto = true
-strip = true
