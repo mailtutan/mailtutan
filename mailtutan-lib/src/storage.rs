@@ -1,5 +1,4 @@
 use crate::models::{Message, MessageEvent};
-use std::sync::Arc;
 use std::sync::Mutex;
 
 pub trait Storage: Sync + Send {
@@ -12,7 +11,6 @@ pub trait Storage: Sync + Send {
 
 // #[derive(Clone)]
 pub struct Connection {
-    // pub storage: Mutex<dyn Storage + Send + Sync + 'static>,
     pub storage: Mutex<Box<dyn Storage + 'static>>,
 }
 

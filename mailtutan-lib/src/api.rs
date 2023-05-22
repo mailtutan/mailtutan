@@ -1,8 +1,7 @@
 use axum::extract::Extension;
 use axum::{routing::delete, routing::get, Router};
-use futures::lock::Mutex;
 
-use crate::storage::{Connection, Storage};
+use crate::storage::Connection;
 use std::sync::Arc;
 
 mod assets;

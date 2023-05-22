@@ -1,5 +1,5 @@
+use crate::models::Message;
 use crate::storage::Connection;
-use crate::{models::Message, STORAGE};
 use axum::extract::Extension;
 use axum::extract::Path;
 use axum::http::StatusCode;
@@ -12,19 +12,25 @@ pub async fn index(Extension(conn): Extension<Arc<Connection>>) -> Json<Vec<Mess
     Json(conn.storage.lock().unwrap().list().to_vec())
 }
 
-pub async fn show_source(Path(id): Path<usize>) -> impl IntoResponse {
+pub async fn show_source(
+    Path(id): Path<usize>,
+    Extension(conn): Extension<Arc<Connection>>,
+) -> impl IntoResponse {
     (
         StatusCode::OK,
         [("Content-Type", "text/plain;charset=utf-8")],
-        STORAGE.lock().unwrap().get(id).source.clone(),
+        conn.storage.lock().unwrap().get(id).source.clone(),
     )
 }
 
-pub async fn show_plain(Path(id): Path<usize>) -> impl IntoResponse {
+pub async fn show_plain(
+    Path(id): Path<usize>,
+    Extension(conn): Extension<Arc<Connection>>,
+) -> impl IntoResponse {
     (
         StatusCode::OK,
         [("Content-Type", "text/plain;charset=utf-8")],
-        STORAGE
+        conn.storage
             .lock()
             .unwrap()
             .get(id)
@@ -35,11 +41,14 @@ pub async fn show_plain(Path(id): Path<usize>) -> impl IntoResponse {
     )
 }
 
-pub async fn show_html(Path(id): Path<usize>) -> impl IntoResponse {
+pub async fn show_html(
+    Path(id): Path<usize>,
+    Extension(conn): Extension<Arc<Connection>>,
+) -> impl IntoResponse {
     (
         StatusCode::OK,
         [("Content-Type", "text/html;charset=utf-8")],
-        STORAGE
+        conn.storage
             .lock()
             .unwrap()
             .get(id)
@@ -50,16 +59,22 @@ pub async fn show_html(Path(id): Path<usize>) -> impl IntoResponse {
     )
 }
 
-pub async fn show_eml(Path(id): Path<usize>) -> impl IntoResponse {
+pub async fn show_eml(
+    Path(id): Path<usize>,
+    Extension(conn): Extension<Arc<Connection>>,
+) -> impl IntoResponse {
     (
         StatusCode::OK,
         [("Content-Type", "message/rfc822")],
-        STORAGE.lock().unwrap().get(id).source.clone(),
+        conn.storage.lock().unwrap().get(id).source.clone(),
     )
 }
 
-pub async fn download_attachment(Path((id, cid)): Path<(usize, String)>) -> impl IntoResponse {
-    for attachment in &STORAGE.lock().unwrap().get(id).attachments {
+pub async fn download_attachment(
+    Path((id, cid)): Path<(usize, String)>,
+    Extension(conn): Extension<Arc<Connection>>,
+) -> impl IntoResponse {
+    for attachment in &conn.storage.lock().unwrap().get(id).attachments {
         if attachment.cid == cid {
             return (
                 StatusCode::OK,
@@ -72,11 +87,14 @@ pub async fn download_attachment(Path((id, cid)): Path<(usize, String)>) -> impl
     (StatusCode::OK, [("Content-Type", "message/rfc822")], vec![])
 }
 
-pub async fn show_json(Path(id): Path<usize>) -> Json<Message> {
-    Json(STORAGE.lock().unwrap().get(id).clone())
+pub async fn show_json(
+    Path(id): Path<usize>,
+    Extension(conn): Extension<Arc<Connection>>,
+) -> Json<Message> {
+    Json(conn.storage.lock().unwrap().get(id).clone())
 }
 
-pub async fn delete_all() -> Html<&'static str> {
-    STORAGE.lock().unwrap().delete_all();
+pub async fn delete_all(Extension(conn): Extension<Arc<Connection>>) -> Html<&'static str> {
+    conn.storage.lock().unwrap().delete_all();
     Html("Ok")
 }

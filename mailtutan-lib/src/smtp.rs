@@ -1,8 +1,8 @@
-use crate::storage::{Connection, Storage};
-use crate::{models::Message, STORAGE};
+use crate::models::Message;
+use crate::storage::Connection;
 use mailin_embedded::{Handler, Server, SslConfig};
+use std::io;
 use std::sync::Arc;
-use std::{dbg, io};
 
 #[derive(Clone)]
 struct MyHandler {
