@@ -1,5 +1,6 @@
-use crate::models::{Message, MessageEvent};
+use crate::models::Message;
 use std::sync::Mutex;
+use tokio::sync::broadcast::Sender;
 
 pub trait Storage: Sync + Send {
     fn list(&self) -> &Vec<Message>;
@@ -12,6 +13,7 @@ pub trait Storage: Sync + Send {
 // #[derive(Clone)]
 pub struct Connection {
     pub storage: Mutex<Box<dyn Storage + 'static>>,
+    pub ws_sender: Sender<String>,
 }
 
 pub struct Memory {
@@ -37,17 +39,6 @@ impl Storage for Memory {
         message.id = Some(self.sequence_id);
 
         self.sequence_id += 1;
-
-        let event = MessageEvent {
-            event_type: "add".to_owned(),
-            message: message.clone(),
-        };
-
-        // TODO: publish the message
-        // WEBSOCKET_TX
-        //     .clone()
-        //     .send(serde_json::to_string(&event).unwrap())
-        //     .ok();
 
         self.records.push(message);
 

@@ -1,4 +1,5 @@
 use crate::models::Message;
+use crate::models::MessageEvent;
 use crate::storage::Connection;
 use mailin_embedded::{Handler, Server, SslConfig};
 use std::io;
@@ -20,7 +21,18 @@ impl Handler for MyHandler {
     fn data_end(&mut self) -> mailin_embedded::Response {
         let message = Message::from(&self.data);
 
+        let event = MessageEvent {
+            event_type: "add".to_owned(),
+            message: message.clone(),
+        };
+
         self.conn.storage.lock().unwrap().add(message);
+
+        self.conn
+            .ws_sender
+            .clone()
+            .send(serde_json::to_string(&event).unwrap())
+            .ok();
 
         mailin_embedded::response::OK
     }

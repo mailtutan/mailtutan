@@ -6,6 +6,7 @@ use std::sync::Arc;
 use std::sync::Mutex;
 
 use tokio::runtime::Builder;
+use tokio::sync::broadcast;
 
 #[tokio::main]
 async fn main() {
@@ -13,6 +14,7 @@ async fn main() {
 
     let storage = Arc::new(Connection {
         storage: Mutex::new(Box::new(Memory::new())),
+        ws_sender: broadcast::channel(100).0,
     });
 
     let mut tasks = vec![];
