@@ -1,10 +1,13 @@
+use crate::storage::{Connection, Storage};
 use crate::{models::Message, STORAGE};
 use mailin_embedded::{Handler, Server, SslConfig};
-use std::io;
+use std::sync::Arc;
+use std::{dbg, io};
 
 #[derive(Clone)]
 struct MyHandler {
     pub data: Vec<u8>,
+    pub conn: Arc<Connection>,
 }
 
 impl Handler for MyHandler {
@@ -17,14 +20,17 @@ impl Handler for MyHandler {
     fn data_end(&mut self) -> mailin_embedded::Response {
         let message = Message::from(&self.data);
 
-        STORAGE.lock().unwrap().add(message);
+        self.conn.storage.lock().unwrap().add(message);
 
         mailin_embedded::response::OK
     }
 }
 
-pub async fn serve() {
-    let handler = MyHandler { data: vec![] };
+pub async fn serve(conn: Arc<Connection>) {
+    let handler = MyHandler {
+        data: vec![],
+        conn: conn.clone(),
+    };
     let mut server = Server::new(handler);
 
     server

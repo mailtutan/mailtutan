@@ -1,11 +1,16 @@
+use axum::extract::Extension;
 use axum::{routing::delete, routing::get, Router};
+use futures::lock::Mutex;
+
+use crate::storage::{Connection, Storage};
+use std::sync::Arc;
 
 mod assets;
 mod messages;
 mod version;
 mod websocket;
 
-pub async fn serve() {
+pub async fn serve(conn: Arc<Connection>) {
     tracing_subscriber::fmt::init();
 
     let app = Router::new()
@@ -25,7 +30,8 @@ pub async fn serve() {
             get(messages::download_attachment),
         )
         .route("/api/messages", delete(messages::delete_all))
-        .route("/api/version", get(version::show));
+        .route("/api/version", get(version::show))
+        .layer(Extension(conn));
 
     println!("listening on http://0.0.0.0:1080");
 

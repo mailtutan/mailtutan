@@ -1,12 +1,15 @@
+use crate::storage::Connection;
 use crate::{models::Message, STORAGE};
+use axum::extract::Extension;
 use axum::extract::Path;
 use axum::http::StatusCode;
 use axum::response::Html;
 use axum::response::IntoResponse;
 use axum::Json;
+use std::sync::Arc;
 
-pub async fn index() -> Json<Vec<Message>> {
-    Json(STORAGE.lock().unwrap().list().to_vec())
+pub async fn index(Extension(conn): Extension<Arc<Connection>>) -> Json<Vec<Message>> {
+    Json(conn.storage.lock().unwrap().list().to_vec())
 }
 
 pub async fn show_source(Path(id): Path<usize>) -> impl IntoResponse {

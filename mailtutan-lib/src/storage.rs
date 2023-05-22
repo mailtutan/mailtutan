@@ -1,11 +1,19 @@
 use crate::models::{Message, MessageEvent};
+use std::sync::Arc;
+use std::sync::Mutex;
 
-pub trait Storage {
+pub trait Storage: Sync + Send {
     fn list(&self) -> &Vec<Message>;
     fn add(&mut self, message: Message) -> usize;
     fn get(&self, item: usize) -> &Message;
     fn size(&self) -> usize;
     fn delete_all(&mut self);
+}
+
+// #[derive(Clone)]
+pub struct Connection {
+    // pub storage: Mutex<dyn Storage + Send + Sync + 'static>,
+    pub storage: Mutex<Box<dyn Storage + 'static>>,
 }
 
 pub struct Memory {
