@@ -7,7 +7,6 @@ edition = "2021"
 
 [dependencies]
 rust-smtp-server = "0.1.1"
-anyhow = "1.0"
 tokio = "1.26"
 async-trait = "0.1.67"
 axum = { version =  "0.6.18", features = ["ws"] }
@@ -15,7 +14,6 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 serde = { version = "1.0.163", features = ["derive"] }
 serde_json = "1.0.96"
-lazy_static = "1.4.0"
 mailparse = "0.14.0"
 mailin-embedded = "0.8.0"
 chrono = "0.4.24"
