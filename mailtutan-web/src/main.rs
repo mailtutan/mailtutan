@@ -45,12 +45,12 @@ use web_sys::HtmlTableCellElement;
 
 #[function_component]
 fn App() -> Html {
-    let messages = use_state(|| vec![]);
+    let messages: UseStateHandle<Vec<Message>> = use_state(|| vec![]);
     let selected_message = use_state(|| None);
 
-    // let onclick = Callback::from(move |e: MouseEvent| {});
-
     let temp_message = selected_message.clone();
+    let temp_messages = messages.clone();
+
     let onclick = Callback::from(move |e: MouseEvent| {
         // let messages = messages.clone();
         // let selected_message = selected_message.clone();
@@ -68,10 +68,12 @@ fn App() -> Html {
             .unwrap();
 
         log::info!("{}", id);
-        // let msg = (*messages.get(id).unwrap()).id.unwrap();
-        //
-        let m: usize = 1;
-        temp_message.set(Some(m));
+
+        let msg: Message = (*temp_messages.get(id - 1).unwrap()).clone();
+        temp_message.set(Some(msg));
+
+        // let m: usize = 1;
+        // temp_message.set(Some(m));
 
         // message.set(Some(((*messages).get(id)).clone()));
 

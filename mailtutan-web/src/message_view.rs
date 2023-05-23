@@ -3,14 +3,13 @@ use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Clone)]
 pub struct MessageViewProps {
-    pub message: Option<usize>,
+    pub message: Option<Message>,
 }
 
 #[function_component]
 pub fn MessageView(MessageViewProps { message }: &MessageViewProps) -> Html {
-    // let message = message.clone();
-
-    // log::info!("message id in MessageView : {}", (message).unwrap());
+    let default_message = &Message::default();
+    let message = message.as_ref().unwrap_or(default_message);
 
     // {
     //     if let Some(message_id) = *message_id {
@@ -41,13 +40,13 @@ pub fn MessageView(MessageViewProps { message }: &MessageViewProps) -> Html {
         <header>
           <dl class="metadata">
             <dt class="created_at">{ "Received" }</dt>
-            <dd class="created_at"></dd>
+            <dd class="created_at">{ &message.created_at }</dd>
             <dt class="from">{ "From" }</dt>
-            <dd class="from"></dd>
+            <dd class="from">{ &message.sender }</dd>
             <dt class="to">{ "To" }</dt>
-            <dd class="to"></dd>
+            <dd class="to">{ &message.recipients.join(", ") }</dd>
             <dt class="subject">{ "Subject" }</dt>
-            <dd class="subject"></dd>
+            <dd class="subject">{ &message.subject }</dd>
             <dt class="attachments">{ "Attachments" }</dt>
             <dd class="attachments"></dd>
           </dl>
