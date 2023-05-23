@@ -21,12 +21,12 @@ impl Handler for MyHandler {
     fn data_end(&mut self) -> mailin_embedded::Response {
         let message = Message::from(&self.data);
 
+        let msg = self.conn.storage.lock().unwrap().add(message);
+
         let event = MessageEvent {
             event_type: "add".to_owned(),
-            message: message.clone(),
+            message: msg,
         };
-
-        self.conn.storage.lock().unwrap().add(message);
 
         self.conn
             .ws_sender

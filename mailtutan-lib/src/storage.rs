@@ -4,7 +4,7 @@ use tokio::sync::broadcast::Sender;
 
 pub trait Storage: Sync + Send {
     fn list(&self) -> &Vec<Message>;
-    fn add(&mut self, message: Message) -> usize;
+    fn add(&mut self, message: Message) -> Message;
     fn get(&self, item: usize) -> &Message;
     fn size(&self) -> usize;
     fn delete_all(&mut self);
@@ -34,14 +34,16 @@ impl Storage for Memory {
         &self.records
     }
 
-    fn add(&mut self, mut message: Message) -> usize {
+    fn add(&mut self, mut message: Message) -> Message {
         message.id = Some(self.sequence_id);
 
         self.sequence_id += 1;
 
+        let clone = message.clone();
+
         self.records.push(message);
 
-        self.sequence_id
+        clone
     }
 
     fn get(&self, item: usize) -> &Message {
