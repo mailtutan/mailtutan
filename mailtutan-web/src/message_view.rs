@@ -1,7 +1,41 @@
+use crate::Message;
 use yew::prelude::*;
 
+#[derive(Properties, PartialEq, Clone)]
+pub struct MessageViewProps {
+    pub message: Option<usize>,
+}
+
 #[function_component]
-pub fn MessageView() -> Html {
+pub fn MessageView(MessageViewProps { message }: &MessageViewProps) -> Html {
+    // let message = message.clone();
+
+    // log::info!("message id in MessageView : {}", (message).unwrap());
+
+    // {
+    //     if let Some(message_id) = *message_id {
+    //         let messages = messages.clone();
+    //         use_effect_with_deps(
+    //             move |_| {
+    //                 let messages = messages.clone();
+    //
+    //                 spawn_local(async move {
+    //                     let fetched_messages: Vec<Message> = Request::get("/api/messages")
+    //                         .send()
+    //                         .await
+    //                         .unwrap()
+    //                         .json()
+    //                         .await
+    //                         .unwrap();
+    //                     messages.set(fetched_messages);
+    //                 });
+    //                 || ()
+    //             },
+    //             (),
+    //         );
+    //     }
+    // }
+
     html! {
       <article id="message">
         <header>

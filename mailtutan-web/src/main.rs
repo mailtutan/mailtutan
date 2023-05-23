@@ -14,7 +14,7 @@ use resizer::Resizer;
 
 use serde::Deserialize;
 
-#[derive(Clone, PartialEq, Deserialize, Default, Debug)]
+#[derive(Clone, Properties, PartialEq, Deserialize, Default, Debug)]
 pub struct Message {
     pub id: Option<usize>,
     pub sender: String,
@@ -40,9 +40,44 @@ pub struct Attachment {
     pub filename: String,
 }
 
+use web_sys::HtmlTableCellElement;
+// use web_sys::HtmlTableRowElement;
+
 #[function_component]
 fn App() -> Html {
     let messages = use_state(|| vec![]);
+    let selected_message = use_state(|| None);
+
+    // let onclick = Callback::from(move |e: MouseEvent| {});
+
+    let temp_message = selected_message.clone();
+    let onclick = Callback::from(move |e: MouseEvent| {
+        // let messages = messages.clone();
+        // let selected_message = selected_message.clone();
+
+        log::info!("just clicked");
+
+        // let a: HtmlTableRowElement = e.target_unchecked_into();
+        let element: HtmlTableCellElement = e.target_unchecked_into();
+        let id = element
+            .parent_element()
+            .unwrap()
+            .get_attribute("data-message-id")
+            .unwrap()
+            .parse::<usize>()
+            .unwrap();
+
+        log::info!("{}", id);
+        // let msg = (*messages.get(id).unwrap()).id.unwrap();
+        //
+        let m: usize = 1;
+        temp_message.set(Some(m));
+
+        // message.set(Some(((*messages).get(id)).clone()));
+
+        // message.set(Some(((*messages).get(id)).clone()));
+    });
+
     {
         let messages = messages.clone();
         use_effect_with_deps(
@@ -94,13 +129,14 @@ fn App() -> Html {
     html! {
         <>
             <Header/>
-            <EmailsList messages={(*messages).clone()}/>
+            <EmailsList messages={(*messages).clone()} onclick={onclick} />
             <Resizer/>
-            <MessageView/>
+            <MessageView message={(*selected_message).clone()} />
         </>
     }
 }
 
 fn main() {
+    wasm_logger::init(wasm_logger::Config::default());
     yew::Renderer::<App>::new().render();
 }
