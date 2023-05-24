@@ -15,32 +15,33 @@ pub fn Root() -> Html {
     let messages: UseStateHandle<Vec<Message>> = use_state(|| vec![]);
     let selected_message = use_state(|| None);
 
-    let temp_message = selected_message.clone();
-    let temp_messages = messages.clone();
+    let onclick = {
+        let selected_message = selected_message.clone();
+        let messages = messages.clone();
 
-    let onclick = Callback::from(move |e: MouseEvent| {
-        log::info!("just clicked");
+        Callback::from(move |e: MouseEvent| {
+            let element: HtmlTableCellElement = e.target_unchecked_into();
+            let id = element
+                .parent_element()
+                .unwrap()
+                .get_attribute("data-message-id")
+                .unwrap()
+                .parse::<usize>()
+                .unwrap();
 
-        let element: HtmlTableCellElement = e.target_unchecked_into();
-        let id = element
-            .parent_element()
-            .unwrap()
-            .get_attribute("data-message-id")
-            .unwrap()
-            .parse::<usize>()
-            .unwrap();
-
-        let msg: Message = (*temp_messages.get(id - 1).unwrap()).clone();
-        temp_message.set(Some(msg));
-    });
+            let msg: Message = (*messages.get(id - 1).unwrap()).clone();
+            selected_message.set(Some(msg));
+        })
+    };
 
     {
+        // Load messages using API
+
         let messages = messages.clone();
 
         use_effect_with_deps(
             move |_| {
                 api::fetch_messages(messages);
-                || ()
             },
             (),
         );
