@@ -1,5 +1,6 @@
 use yew::prelude::*;
 
+use crate::api;
 use crate::component::header::Header;
 use crate::component::message_list::MessageList;
 use crate::component::message_view::MessageView;
@@ -7,8 +8,6 @@ use crate::component::resizer::Resizer;
 use crate::ws;
 use crate::Message;
 
-use gloo_net::http::Request;
-use wasm_bindgen_futures::spawn_local;
 use web_sys::HtmlTableCellElement;
 
 #[function_component]
@@ -31,35 +30,22 @@ pub fn Root() -> Html {
             .parse::<usize>()
             .unwrap();
 
-        log::info!("{}", id);
-
         let msg: Message = (*temp_messages.get(id - 1).unwrap()).clone();
         temp_message.set(Some(msg));
     });
 
     {
         let messages = messages.clone();
+
         use_effect_with_deps(
             move |_| {
-                let messages = messages.clone();
-
-                spawn_local(async move {
-                    let fetched_messages: Vec<Message> = Request::get("/api/messages")
-                        .send()
-                        .await
-                        .unwrap()
-                        .json()
-                        .await
-                        .unwrap();
-                    messages.set(fetched_messages);
-                });
+                api::fetch_messages(messages);
                 || ()
             },
             (),
         );
     }
-
-    ws::listen(messages.clone());
+    // ws::listen(messages.clone());
 
     html! {
         <>

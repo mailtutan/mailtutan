@@ -1,5 +1,6 @@
 use yew::prelude::*;
 
+mod api;
 mod component;
 mod ws;
 
