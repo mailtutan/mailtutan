@@ -1,6 +1,7 @@
 use yew::prelude::*;
 
 mod component;
+mod ws;
 
 use serde::Deserialize;
 
