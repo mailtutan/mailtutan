@@ -6,8 +6,3 @@
 * use parts iterator in message parse
 * size in APIs not defined yet
 * implement file storage
-* take assets out of lib
-
-
-main -> api -> storage -> socket
-main -> smtp -> storage -> socket
