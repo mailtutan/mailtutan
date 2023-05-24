@@ -49,7 +49,7 @@ impl From<&Vec<u8>> for Message {
             .get_first_value("Subject")
             .unwrap_or_default();
 
-        let mut formats = vec![];
+        let mut formats = vec!["source".to_owned()];
         let mut html: Option<String> = None;
         let mut plain: Option<String> = None;
         let mut attachments: Vec<Attachment> = vec![];
