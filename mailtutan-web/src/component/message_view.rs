@@ -11,29 +11,12 @@ pub fn MessageView(Props { message }: &Props) -> Html {
     let default_message = &Message::default();
     let message = message.as_ref().unwrap_or(default_message);
 
-    // {
-    //     if let Some(message_id) = *message_id {
-    //         let messages = messages.clone();
-    //         use_effect_with_deps(
-    //             move |_| {
-    //                 let messages = messages.clone();
-    //
-    //                 spawn_local(async move {
-    //                     let fetched_messages: Vec<Message> = Request::get("/api/messages")
-    //                         .send()
-    //                         .await
-    //                         .unwrap()
-    //                         .json()
-    //                         .await
-    //                         .unwrap();
-    //                     messages.set(fetched_messages);
-    //                 });
-    //                 || ()
-    //             },
-    //             (),
-    //         );
-    //     }
-    // }
+    let iframe_src = match message.id {
+        Some(id) => format!("{}{}{}", "/api/messages/", id, "/plain"),
+        None => "about:blank".to_owned(),
+    };
+
+    log::info!("src : {}", iframe_src);
 
     html! {
       <article id="message">
@@ -59,7 +42,7 @@ pub fn MessageView(Props { message }: &Props) -> Html {
             </ul>
           </nav>
         </header>
-        <iframe class="body"></iframe>
+        <iframe class="body" src={ iframe_src }></iframe>
       </article>
     }
 }
