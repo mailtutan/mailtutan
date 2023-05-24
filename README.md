@@ -6,3 +6,4 @@
 * use parts iterator in message parse
 * size in APIs not defined yet
 * implement file storage
+* implement resizer

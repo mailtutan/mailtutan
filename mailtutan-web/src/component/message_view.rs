@@ -2,12 +2,12 @@ use crate::Message;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Clone)]
-pub struct MessageViewProps {
+pub struct Props {
     pub message: Option<Message>,
 }
 
 #[function_component]
-pub fn MessageView(MessageViewProps { message }: &MessageViewProps) -> Html {
+pub fn MessageView(Props { message }: &Props) -> Html {
     let default_message = &Message::default();
     let message = message.as_ref().unwrap_or(default_message);
 

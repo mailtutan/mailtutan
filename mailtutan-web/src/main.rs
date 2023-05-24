@@ -2,15 +2,12 @@ use gloo_net::http::Request;
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 
-mod emails_list;
-mod header;
-mod message_view;
-mod resizer;
+mod component;
 
-use emails_list::EmailsList;
-use header::Header;
-use message_view::MessageView;
-use resizer::Resizer;
+use component::header::Header;
+use component::message_list::MessageList;
+use component::message_view::MessageView;
+use component::resizer::Resizer;
 
 use serde::Deserialize;
 
@@ -131,7 +128,7 @@ fn App() -> Html {
     html! {
         <>
             <Header/>
-            <EmailsList messages={(*messages).clone()} onclick={onclick} />
+            <MessageList messages={(*messages).clone()} onclick={onclick} />
             <Resizer/>
             <MessageView message={(*selected_message).clone()} />
         </>

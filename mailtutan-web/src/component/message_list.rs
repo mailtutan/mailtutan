@@ -2,13 +2,13 @@ use crate::Message;
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq)]
-pub struct EmailsListProps {
+pub struct Props {
     pub messages: Vec<Message>,
     pub onclick: Callback<MouseEvent>,
 }
 
 #[function_component]
-pub fn EmailsList(EmailsListProps { messages, onclick }: &EmailsListProps) -> Html {
+pub fn MessageList(Props { messages, onclick }: &Props) -> Html {
     let list = messages
         .iter()
         .map(|message| {
