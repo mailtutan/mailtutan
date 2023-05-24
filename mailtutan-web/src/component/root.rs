@@ -45,7 +45,7 @@ pub fn Root() -> Html {
             (),
         );
     }
-    // ws::listen(messages.clone());
+    ws::listen(messages.clone());
 
     html! {
         <>
