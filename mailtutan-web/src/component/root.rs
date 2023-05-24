@@ -4,14 +4,14 @@ use crate::component::header::Header;
 use crate::component::message_list::MessageList;
 use crate::component::message_view::MessageView;
 use crate::component::resizer::Resizer;
-
-use wasm_bindgen_futures::spawn_local;
-
-use web_sys::HtmlTableCellElement;
-
-use gloo_net::http::Request;
-
 use crate::{Attachment, Message, MessageEvent};
+
+use futures::StreamExt;
+use gloo_net::http::Request;
+use gloo_net::websocket::{self, futures::WebSocket};
+use serde_json;
+use wasm_bindgen_futures::spawn_local;
+use web_sys::HtmlTableCellElement;
 
 #[function_component]
 pub fn Root() -> Html {
@@ -22,12 +22,8 @@ pub fn Root() -> Html {
     let temp_messages = messages.clone();
 
     let onclick = Callback::from(move |e: MouseEvent| {
-        // let messages = messages.clone();
-        // let selected_message = selected_message.clone();
-
         log::info!("just clicked");
 
-        // let a: HtmlTableRowElement = e.target_unchecked_into();
         let element: HtmlTableCellElement = e.target_unchecked_into();
         let id = element
             .parent_element()
@@ -41,13 +37,6 @@ pub fn Root() -> Html {
 
         let msg: Message = (*temp_messages.get(id - 1).unwrap()).clone();
         temp_message.set(Some(msg));
-
-        // let m: usize = 1;
-        // temp_message.set(Some(m));
-
-        // message.set(Some(((*messages).get(id)).clone()));
-
-        // message.set(Some(((*messages).get(id)).clone()));
     });
 
     {
@@ -74,11 +63,6 @@ pub fn Root() -> Html {
 
     {
         let messages = messages.clone();
-        use futures::StreamExt;
-        use gloo_net::websocket;
-        use gloo_net::websocket::futures::WebSocket;
-        use serde_json;
-        use wasm_bindgen_futures::spawn_local;
 
         let ws = WebSocket::open("ws://127.0.0.1:1080/ws").unwrap();
 
