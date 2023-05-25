@@ -10,8 +10,6 @@ mod version;
 mod websocket;
 
 pub async fn serve(conn: Arc<Connection>, uri: String) {
-    tracing_subscriber::fmt::init();
-
     let app = Router::new()
         .route("/", get(assets::index_html))
         .route("/ws", get(websocket::websocket_handler))
