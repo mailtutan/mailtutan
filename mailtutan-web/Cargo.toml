@@ -22,5 +22,5 @@ features = [
   "HtmlTableCellElement",
 ]
 
-[build-dependencies]
-trunk = "0.16.0"
+# [build-dependencies]
+# trunk = "0.16.0"
