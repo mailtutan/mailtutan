@@ -1,9 +1,9 @@
 [package]
 name = "mailtutan-lib"
-authors = ["Mohsen Alizadeh <mohsen@alizadeh.us>"]
-homepage= "https://github.com/mohsen-alizadeh/mailtutan"
-version = "0.1.0"
-edition = "2021"
+authors.workspace = true
+homepage.workspace = true
+version.workspace = true
+edition.workspace = true
 
 [dependencies]
 tokio = "1.26"

@@ -1,9 +1,8 @@
-# [package]
-# name = "mailtutan"
-# authors = ["Mohsen Alizadeh <mohsen@alizadeh.us>"]
-# homepage= "https://github.com/mohsen-alizadeh/mailtutan"
-# version = "0.1.0"
-# edition = "2021"
+[workspace.package]
+authors = ["Mohsen Alizadeh <mohsen@alizadeh.us>"]
+homepage= "https://github.com/mohsen-alizadeh/mailtutan"
+version = "0.1.0"
+edition = "2021"
 
 [profile.release]
 opt-level = 'z'
