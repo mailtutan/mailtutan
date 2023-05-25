@@ -38,7 +38,7 @@ impl Handler for MyHandler {
     }
 }
 
-pub async fn serve(conn: Arc<Connection>) {
+pub async fn serve(conn: Arc<Connection>, uri: String) {
     let handler = MyHandler {
         data: vec![],
         conn: conn.clone(),
@@ -49,8 +49,10 @@ pub async fn serve(conn: Arc<Connection>) {
         .with_name("example.com")
         .with_ssl(SslConfig::None)
         .unwrap()
-        .with_addr("127.0.0.1:1025")
+        .with_addr(&uri)
         .unwrap();
+
+    println!("listening on smtp://{}", &uri);
 
     server.serve().unwrap();
 }

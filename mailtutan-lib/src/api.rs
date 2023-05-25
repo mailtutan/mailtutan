@@ -9,7 +9,7 @@ mod messages;
 mod version;
 mod websocket;
 
-pub async fn serve(conn: Arc<Connection>) {
+pub async fn serve(conn: Arc<Connection>, uri: String) {
     tracing_subscriber::fmt::init();
 
     let app = Router::new()
@@ -32,9 +32,9 @@ pub async fn serve(conn: Arc<Connection>) {
         .route("/api/version", get(version::show))
         .layer(Extension(conn));
 
-    println!("listening on http://0.0.0.0:1080");
+    println!("listening on http://{}", &uri);
 
-    axum::Server::bind(&"0.0.0.0:1080".parse().unwrap())
+    axum::Server::bind(&uri.parse().unwrap())
         .serve(app.into_make_service())
         .await
         .unwrap();
