@@ -1,7 +1,7 @@
 use crate::models::Message;
 use crate::models::MessageEvent;
 use crate::storage::Connection;
-use mailin_embedded::{Handler, Server, SslConfig};
+use mailin_embedded::{Handler, Server};
 use std::io;
 use std::sync::Arc;
 
@@ -45,12 +45,7 @@ pub async fn serve(conn: Arc<Connection>, uri: String) {
     };
     let mut server = Server::new(handler);
 
-    server
-        .with_name("example.com")
-        .with_ssl(SslConfig::None)
-        .unwrap()
-        .with_addr(&uri)
-        .unwrap();
+    server.with_addr(&uri).unwrap();
 
     println!("listening on smtp://{}", &uri);
 
