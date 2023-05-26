@@ -1,9 +1,10 @@
+MailTutan
+=========
 
-# mailtutan
+Inspired by [MailCatcher](https://mailcatcher.me/), easier to install, build in Rust programming language.
 
-# TODO
-* get sender and receiver from the commands not message content
-* use parts iterator in message parse
-* size in APIs not defined yet
-* implement file storage
-* implement resizer
+* Download standalone Mailtutan binary, or build from source, or use docker image
+* Configure your outgoing SMTP server
+* View your outgoing email in a web UI
+
+Proadly built with Rust programming language.
