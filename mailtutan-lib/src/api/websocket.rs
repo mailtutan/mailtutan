@@ -1,25 +1,20 @@
-use crate::storage::Connection;
-use axum::extract::Extension;
 use axum::{
     extract::ws::{Message, WebSocket, WebSocketUpgrade},
     response::IntoResponse,
 };
-use std::sync::Arc;
 
 use futures::{sink::SinkExt, stream::StreamExt};
 
-pub async fn websocket_handler(
-    ws: WebSocketUpgrade,
-    Extension(conn): Extension<Arc<Connection>>,
-) -> impl IntoResponse {
-    ws.on_upgrade(|socket| websocket(socket, conn))
+use crate::APP;
+
+pub async fn websocket_handler(ws: WebSocketUpgrade) -> impl IntoResponse {
+    ws.on_upgrade(|socket| websocket(socket))
 }
 
-async fn websocket(stream: WebSocket, conn: Arc<Connection>) {
-    // By splitting, we can send and receive at the same time.
+async fn websocket(stream: WebSocket) {
     let (mut sender, _) = stream.split();
 
-    let mut rx = conn.ws_sender.subscribe();
+    let mut rx = APP.get().unwrap().lock().unwrap().ws_sender.subscribe();
 
     tokio::spawn(async move {
         while let Ok(msg) = rx.recv().await {

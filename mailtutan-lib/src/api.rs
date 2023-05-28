@@ -1,15 +1,13 @@
-use axum::extract::Extension;
 use axum::{routing::delete, routing::get, Router};
 
-use crate::storage::Connection;
-use std::sync::Arc;
+use crate::APP;
 
 mod assets;
 mod messages;
 mod version;
 mod websocket;
 
-pub async fn serve(conn: Arc<Connection>, uri: String) {
+pub async fn serve() {
     let app = Router::new()
         .route("/", get(assets::index_html))
         .route("/ws", get(websocket::websocket_handler))
@@ -27,10 +25,11 @@ pub async fn serve(conn: Arc<Connection>, uri: String) {
             get(messages::download_attachment),
         )
         .route("/api/messages", delete(messages::delete_all))
-        .route("/api/version", get(version::show))
-        .layer(Extension(conn));
+        .route("/api/version", get(version::show));
 
-    println!("listening on http://{}", &uri);
+    let uri = APP.get().unwrap().lock().unwrap().get_api_uri();
+
+    println!("listening on http://{}", uri);
 
     axum::Server::bind(&uri.parse().unwrap())
         .serve(app.into_make_service())

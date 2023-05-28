@@ -1,38 +1,39 @@
 use crate::models::Message;
-use crate::storage::Connection;
-use axum::extract::Extension;
+use crate::APP;
 use axum::extract::Path;
 use axum::http::StatusCode;
 use axum::response::Html;
 use axum::response::IntoResponse;
 use axum::Json;
-use std::sync::Arc;
 
-pub async fn index(Extension(conn): Extension<Arc<Connection>>) -> Json<Vec<Message>> {
-    Json(conn.storage.lock().unwrap().list().to_vec())
+pub async fn index() -> Json<Vec<Message>> {
+    Json(APP.get().unwrap().lock().unwrap().storage.list().to_vec())
 }
 
-pub async fn show_source(
-    Path(id): Path<usize>,
-    Extension(conn): Extension<Arc<Connection>>,
-) -> impl IntoResponse {
+pub async fn show_source(Path(id): Path<usize>) -> impl IntoResponse {
     (
         StatusCode::OK,
         [("Content-Type", "text/plain;charset=utf-8")],
-        conn.storage.lock().unwrap().get(id).source.clone(),
+        APP.get()
+            .unwrap()
+            .lock()
+            .unwrap()
+            .storage
+            .get(id)
+            .source
+            .clone(),
     )
 }
 
-pub async fn show_plain(
-    Path(id): Path<usize>,
-    Extension(conn): Extension<Arc<Connection>>,
-) -> impl IntoResponse {
+pub async fn show_plain(Path(id): Path<usize>) -> impl IntoResponse {
     (
         StatusCode::OK,
         [("Content-Type", "text/plain;charset=utf-8")],
-        conn.storage
+        APP.get()
+            .unwrap()
             .lock()
             .unwrap()
+            .storage
             .get(id)
             .plain
             .as_ref()
@@ -41,16 +42,15 @@ pub async fn show_plain(
     )
 }
 
-pub async fn show_html(
-    Path(id): Path<usize>,
-    Extension(conn): Extension<Arc<Connection>>,
-) -> impl IntoResponse {
+pub async fn show_html(Path(id): Path<usize>) -> impl IntoResponse {
     (
         StatusCode::OK,
         [("Content-Type", "text/html;charset=utf-8")],
-        conn.storage
+        APP.get()
+            .unwrap()
             .lock()
             .unwrap()
+            .storage
             .get(id)
             .html
             .as_ref()
@@ -59,22 +59,31 @@ pub async fn show_html(
     )
 }
 
-pub async fn show_eml(
-    Path(id): Path<usize>,
-    Extension(conn): Extension<Arc<Connection>>,
-) -> impl IntoResponse {
+pub async fn show_eml(Path(id): Path<usize>) -> impl IntoResponse {
     (
         StatusCode::OK,
         [("Content-Type", "message/rfc822")],
-        conn.storage.lock().unwrap().get(id).source.clone(),
+        APP.get()
+            .unwrap()
+            .lock()
+            .unwrap()
+            .storage
+            .get(id)
+            .source
+            .clone(),
     )
 }
 
-pub async fn download_attachment(
-    Path((id, cid)): Path<(usize, String)>,
-    Extension(conn): Extension<Arc<Connection>>,
-) -> impl IntoResponse {
-    for attachment in &conn.storage.lock().unwrap().get(id).attachments {
+pub async fn download_attachment(Path((id, cid)): Path<(usize, String)>) -> impl IntoResponse {
+    for attachment in &APP
+        .get()
+        .unwrap()
+        .lock()
+        .unwrap()
+        .storage
+        .get(id)
+        .attachments
+    {
         if attachment.cid == cid {
             return (
                 StatusCode::OK,
@@ -87,14 +96,11 @@ pub async fn download_attachment(
     (StatusCode::OK, [("Content-Type", "message/rfc822")], vec![])
 }
 
-pub async fn show_json(
-    Path(id): Path<usize>,
-    Extension(conn): Extension<Arc<Connection>>,
-) -> Json<Message> {
-    Json(conn.storage.lock().unwrap().get(id).clone())
+pub async fn show_json(Path(id): Path<usize>) -> Json<Message> {
+    Json(APP.get().unwrap().lock().unwrap().storage.get(id).clone())
 }
 
-pub async fn delete_all(Extension(conn): Extension<Arc<Connection>>) -> Html<&'static str> {
-    conn.storage.lock().unwrap().delete_all();
+pub async fn delete_all() -> Html<&'static str> {
+    APP.get().unwrap().lock().unwrap().storage.delete_all();
     Html("Ok")
 }

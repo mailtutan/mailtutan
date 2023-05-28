@@ -959,6 +959,7 @@ dependencies = [
  "futures",
  "mailin-embedded",
  "mailparse",
+ "once_cell",
  "serde",
  "serde_json",
  "tokio",

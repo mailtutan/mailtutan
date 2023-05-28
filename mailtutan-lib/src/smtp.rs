@@ -1,14 +1,12 @@
 use crate::models::Message;
 use crate::models::MessageEvent;
-use crate::storage::Connection;
+use crate::APP;
 use mailin_embedded::{Handler, Server};
 use std::io;
-use std::sync::Arc;
 
 #[derive(Clone)]
 struct MyHandler {
     pub data: Vec<u8>,
-    pub conn: Arc<Connection>,
 }
 
 impl Handler for MyHandler {
@@ -21,14 +19,17 @@ impl Handler for MyHandler {
     fn data_end(&mut self) -> mailin_embedded::Response {
         let message = Message::from(&self.data);
 
-        let msg = self.conn.storage.lock().unwrap().add(message);
+        let msg = APP.get().unwrap().lock().unwrap().storage.add(message);
 
         let event = MessageEvent {
             event_type: "add".to_owned(),
             message: msg,
         };
 
-        self.conn
+        APP.get()
+            .unwrap()
+            .lock()
+            .unwrap()
             .ws_sender
             .clone()
             .send(serde_json::to_string(&event).unwrap())
@@ -38,12 +39,11 @@ impl Handler for MyHandler {
     }
 }
 
-pub async fn serve(conn: Arc<Connection>, uri: String) {
-    let handler = MyHandler {
-        data: vec![],
-        conn: conn.clone(),
-    };
+pub async fn serve() {
+    let handler = MyHandler { data: vec![] };
     let mut server = Server::new(handler);
+
+    let uri = APP.get().unwrap().lock().unwrap().get_smtp_uri();
 
     server.with_addr(&uri).unwrap();
 

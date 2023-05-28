@@ -2,3 +2,32 @@ pub mod api;
 pub mod models;
 pub mod smtp;
 pub mod storage;
+use once_cell::sync::OnceCell;
+use storage::Storage;
+use tokio::sync::broadcast::Sender;
+
+static APP: OnceCell<Mutex<Mailtutan>> = OnceCell::new();
+
+use std::{net::Ipv4Addr, sync::Mutex};
+
+pub struct Mailtutan {
+    pub ip: Ipv4Addr,
+    pub http_port: u16,
+    pub smtp_port: u16,
+    pub storage: Box<dyn Storage + 'static>,
+    pub ws_sender: Sender<String>,
+}
+
+impl Mailtutan {
+    pub fn get_api_uri(&self) -> String {
+        format!("{}:{}", self.ip, self.http_port)
+    }
+
+    pub fn get_smtp_uri(&self) -> String {
+        format!("{}:{}", self.ip, self.smtp_port)
+    }
+
+    pub fn init(self) {
+        APP.get_or_init(|| Mutex::new(self));
+    }
+}
