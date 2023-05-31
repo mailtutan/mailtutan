@@ -2,9 +2,14 @@ use yew::prelude::*;
 
 #[function_component]
 pub fn Header() -> Html {
+    let mailtutan: String = "MAILTUTAN"
+        .chars()
+        .map(|f| format!("{}{}", f, "\u{00a0}".repeat(5)))
+        .collect();
+
     html! {
         <header>
-        <h1>{ "Mailtutan" }</h1>
+        <h1>{ mailtutan }</h1>
         <nav class="app">
           <ul>
             <li class="search hidden"><input type="search" name="search" placeholder="Search messages..." incremental="true" /></li>

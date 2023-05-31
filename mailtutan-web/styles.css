@@ -232,9 +232,9 @@ body>header {
 
 body>header h1 {
   float: left;
-  margin-left: 6px;
+  /* margin-left: 6px; */
   padding: 6px;
-  padding-left: 30px;
+  /* padding-left: 30px; */
   background-size: 24px 24px;
   font-size: 18px;
   font-weight: bold
