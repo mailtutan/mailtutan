@@ -318,7 +318,8 @@ body>header nav li a:focus {
   -o-transition: ease 0.1s;
   -webkit-transition: ease 0.1s;
   transition: ease 0.1s;
-  color: #333
+  color: #333;
+  padding: 1px 0 1px 0;
 }
 
 #messages table tbody tr:hover {
@@ -330,12 +331,12 @@ body>header nav li a:focus {
 }
 
 #messages table tbody tr.selected {
-  background: Highlight;
+  background: #3B82EC;
   color: HighlightText
 }
 
 #messages table tbody tr td {
-  padding: 0.25em
+  padding: 10px 5px 10px 5px
 }
 
 #messages table tbody tr td.blank {
