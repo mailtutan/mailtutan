@@ -4,7 +4,6 @@ use crate::api;
 use crate::component::header::Header;
 use crate::component::message_list::MessageList;
 use crate::component::message_view::MessageView;
-use crate::component::resizer::Resizer;
 use crate::ws;
 use crate::Message;
 
@@ -52,7 +51,7 @@ pub fn Root() -> Html {
         <>
             <Header/>
             <div class="main">
-                <MessageList messages={(*messages).clone()} onclick={onclick} />
+                <MessageList messages={(*messages).clone()} selected_message={{(*selected_message).clone()}} onclick={onclick} />
                 <MessageView message={(*selected_message).clone()} />
             </div>
         </>
