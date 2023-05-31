@@ -20,6 +20,10 @@ pub fn MessageView(Props { message }: &Props) -> Html {
             .to_owned()
     });
 
+    if message.id.is_none() {
+        return html!();
+    }
+
     let iframe_src = match message.id {
         Some(id) => format!("{}{}/{}", "/api/messages/", id, *selected_format),
         None => "about:blank".to_owned(),
