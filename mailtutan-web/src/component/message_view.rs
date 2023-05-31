@@ -78,7 +78,7 @@ pub fn MessageView(Props { message }: &Props) -> Html {
               <li onclick={&onclick} class={tab_classes("html")} data-message-format="html"><a href="#">{ "HTML" }</a></li>
               <li onclick={&onclick} class={tab_classes("plain")} data-message-format="plain"><a href="#">{ "Plain Text" }</a></li>
               <li onclick={&onclick} class={tab_classes("source")} data-message-format="source"><a href="#">{ "Source" }</a></li>
-              <li class="action download" data-message-format="html"><a href="#" class="button"><span>{ "Download" }</span></a></li>
+              <li class="format tab" data-message-format="html"><a href="#"><span>{ "Download" }</span></a></li>
             </ul>
           </nav>
         </header>

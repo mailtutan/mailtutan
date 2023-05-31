@@ -51,9 +51,10 @@ pub fn Root() -> Html {
     html! {
         <>
             <Header/>
-            <MessageList messages={(*messages).clone()} onclick={onclick} />
-            <Resizer/>
-            <MessageView message={(*selected_message).clone()} />
+            <div class="main">
+                <MessageList messages={(*messages).clone()} onclick={onclick} />
+                <MessageView message={(*selected_message).clone()} />
+            </div>
         </>
     }
 }
