@@ -1,6 +1,6 @@
 use std::todo;
 
-use chrono::Utc;
+use chrono::Local;
 use mailparse::*;
 use serde::Serialize;
 
@@ -96,7 +96,7 @@ impl From<&Vec<u8>> for Message {
             sender,
             recipients,
             subject,
-            created_at: Some(Utc::now().to_rfc3339()),
+            created_at: Some(Local::now().format("%Y-%m-%d %H:%M:%S").to_string()),
             attachments,
             source: data.to_owned(),
             formats,
