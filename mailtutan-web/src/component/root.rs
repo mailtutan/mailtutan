@@ -8,7 +8,10 @@ use crate::ws;
 use crate::Message;
 use gloo_dialogs::confirm;
 
+use std::sync::Once;
 use web_sys::HtmlTableCellElement;
+
+static WS_ONCE: Once = Once::new();
 
 #[function_component]
 pub fn Root() -> Html {
@@ -22,12 +25,6 @@ pub fn Root() -> Html {
             if confirm("Do you want to clear all messages?") {
                 api::delete_messages();
 
-                // use_effect_with_deps(
-                //     move |_| {
-                //         api::fetch_messages(messages);
-                //     },
-                //     (),
-                // );
                 messages.set(vec![]);
             }
         })
@@ -62,7 +59,10 @@ pub fn Root() -> Html {
             (),
         );
     }
-    ws::listen(messages.clone());
+
+    WS_ONCE.call_once(|| {
+        ws::listen(messages.clone());
+    });
 
     html! {
         <>

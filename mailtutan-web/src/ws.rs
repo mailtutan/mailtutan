@@ -13,14 +13,17 @@ pub fn listen(messages: UseStateHandle<Vec<Message>>) {
     let (_, mut read) = ws.split();
     spawn_local(async move {
         while let Some(msg) = read.next().await {
-            if let websocket::Message::Text(msg) = msg.unwrap() {
-                let m: MessageEvent = serde_json::from_str(&msg).unwrap();
+            if let Ok(websocket::Message::Text(msg)) = msg {
+                if let Ok(m) = serde_json::from_str::<MessageEvent>(&msg) {
+                    log::info!("a message received");
+                    log::info!("{:?}", m.message.id.ok_or("none"));
 
-                let mut new_msg: Vec<Message> = (*messages).clone();
+                    let mut new_msg: Vec<Message> = (*messages).clone();
 
-                new_msg.push(m.message);
+                    new_msg.push(m.message);
 
-                messages.set(new_msg);
+                    messages.set(new_msg);
+                }
             }
         }
     });
