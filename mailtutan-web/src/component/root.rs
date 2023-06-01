@@ -6,6 +6,7 @@ use crate::component::message_list::MessageList;
 use crate::component::message_view::MessageView;
 use crate::ws;
 use crate::Message;
+use gloo_dialogs::confirm;
 
 use web_sys::HtmlTableCellElement;
 
@@ -13,6 +14,24 @@ use web_sys::HtmlTableCellElement;
 pub fn Root() -> Html {
     let messages: UseStateHandle<Vec<Message>> = use_state(|| vec![]);
     let selected_message = use_state(|| None);
+
+    let clear_onclick = {
+        let messages = messages.clone();
+
+        Callback::from(move |_: MouseEvent| {
+            if confirm("Do you want to clear all messages?") {
+                api::delete_messages();
+
+                // use_effect_with_deps(
+                //     move |_| {
+                //         api::fetch_messages(messages);
+                //     },
+                //     (),
+                // );
+                messages.set(vec![]);
+            }
+        })
+    };
 
     let onclick = {
         let selected_message = selected_message.clone();
@@ -34,8 +53,6 @@ pub fn Root() -> Html {
     };
 
     {
-        // Load messages using API
-
         let messages = messages.clone();
 
         use_effect_with_deps(
@@ -49,7 +66,7 @@ pub fn Root() -> Html {
 
     html! {
         <>
-            <Header/>
+            <Header clear_onclick={clear_onclick} />
             <div class="main">
                 <MessageList messages={(*messages).clone()} selected_message={{(*selected_message).clone()}} onclick={onclick} />
                 <MessageView message={(*selected_message).clone()} />

@@ -970,6 +970,7 @@ name = "mailtutan-web"
 version = "0.1.0"
 dependencies = [
  "futures",
+ "gloo-dialogs",
  "gloo-net",
  "log",
  "serde",

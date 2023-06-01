@@ -15,3 +15,9 @@ pub fn fetch_messages(messages: UseStateHandle<Vec<Message>>) {
         messages.set(fetched_messages);
     });
 }
+
+pub fn delete_messages() {
+    spawn_local(async move {
+        Request::delete("/api/messages").send().await.unwrap();
+    });
+}
