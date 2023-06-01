@@ -327,7 +327,7 @@ body>header nav li a:focus {
 }
 
 #messages table tbody tr:nth-child(even) {
-  background: #f0f0f0
+  background: #e8f0fc;
 }
 
 #messages table tbody tr.selected {

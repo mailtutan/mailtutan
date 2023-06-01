@@ -9,9 +9,13 @@ pub struct Props {
 
 #[function_component]
 pub fn MessageView(Props { message }: &Props) -> Html {
+    if message.is_none() {
+        return html!();
+    }
+
     let default_format = "source".to_owned();
-    let default_message = &Message::default();
-    let message = message.as_ref().unwrap_or(default_message);
+    let message = message.as_ref().unwrap();
+
     let selected_format = use_state(|| {
         message
             .formats
@@ -19,10 +23,6 @@ pub fn MessageView(Props { message }: &Props) -> Html {
             .unwrap_or_else(|| &default_format)
             .to_owned()
     });
-
-    if message.id.is_none() {
-        return html!();
-    }
 
     let iframe_src = match message.id {
         Some(id) => format!("{}{}/{}", "/api/messages/", id, *selected_format),
