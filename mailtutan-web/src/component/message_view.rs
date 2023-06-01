@@ -68,12 +68,16 @@ pub fn MessageView(Props { message }: &Props) -> Html {
           <dl class="metadata">
             <dt class="created_at">{ "Received" }</dt>
             <dd class="created_at">{ &message.created_at }</dd>
+
             <dt class="from">{ "From" }</dt>
             <dd class="from">{ &message.sender }</dd>
+
             <dt class="to">{ "To" }</dt>
             <dd class="to">{ &message.recipients.join(", ") }</dd>
+
             <dt class="subject">{ "Subject" }</dt>
             <dd class="subject">{ &message.subject }</dd>
+
             <dt class="attachments">{ "Attachments" }</dt>
             <dd class="attachments"></dd>
           </dl>

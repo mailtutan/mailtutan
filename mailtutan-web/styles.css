@@ -372,7 +372,7 @@ body>header nav li a:focus {
 
 #message>header .metadata dt,
 #message>header .metadata dd {
-  padding: 0.25em;
+  padding: 10px;
   color: #000;
 }
 
@@ -381,29 +381,29 @@ body>header nav li a:focus {
   clear: left;
   width: 8em;
   margin-right: 0.5em;
-  text-align: right;
+  text-align: left;
 }
 
 #message>header .metadata dd.subject {
   font-weight: bold
 }
 
-#message>header .metadata .attachments {
-  display: none
-}
-
-#message>header .metadata .attachments ul {
-  display: inline
-}
-
-#message>header .metadata .attachments ul li {
-  display: inline-block;
-  vertical-align: middle;
-  *vertical-align: auto;
-  *zoom: 1;
-  *display: inline;
-  margin-right: 0.5em
-}
+/* #message>header .metadata .attachments { */
+/*   display: none */
+/* } */
+/*  */
+/* #message>header .metadata .attachments ul { */
+/*   display: inline */
+/* } */
+/*  */
+/* #message>header .metadata .attachments ul li { */
+/*   display: inline-block; */
+/*   vertical-align: middle; */
+/*   *vertical-align: auto; */
+/*   *zoom: 1; */
+/*   *display: inline; */
+/*   margin-right: 0.5em */
+/* } */
 
 #message>header .views ul {
   padding: 0 0.5em;
