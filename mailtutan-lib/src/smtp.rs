@@ -11,12 +11,14 @@ struct MyHandler {
 
 impl Handler for MyHandler {
     fn data(&mut self, buf: &[u8]) -> io::Result<()> {
+        // dbg!("data received");
         self.data.append(&mut buf.to_owned());
 
         Ok(())
     }
 
     fn data_end(&mut self) -> mailin_embedded::Response {
+        // dbg!("data end");
         let message = Message::from(&self.data);
 
         let msg = APP.get().unwrap().lock().unwrap().storage.add(message);

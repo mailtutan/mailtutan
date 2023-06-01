@@ -893,6 +893,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "mail-parser"
+version = "0.8.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e4158a1c18963244e083888b21465846dfb68d6170850ed1ab4742edd57c9d47"
+dependencies = [
+ "encoding_rs",
+]
+
+[[package]]
 name = "mailin"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -957,6 +966,7 @@ dependencies = [
  "axum",
  "chrono",
  "futures",
+ "mail-parser",
  "mailin-embedded",
  "mailparse",
  "once_cell",

@@ -1,7 +1,5 @@
-use std::todo;
-
 use chrono::Local;
-use mailparse::*;
+use mail_parser;
 use serde::Serialize;
 
 #[derive(Serialize, Debug, Default, Clone)]
@@ -40,56 +38,76 @@ pub struct Attachment {
 
 impl From<&Vec<u8>> for Message {
     fn from(data: &Vec<u8>) -> Self {
-        let parsed = parse_mail(data.as_ref()).unwrap();
+        use mail_parser::HeaderValue;
 
-        let sender = parsed.headers.get_first_value("From").unwrap_or_default();
-        let recipients = parsed.headers.get_all_values("To");
-        let subject = parsed
-            .headers
-            .get_first_value("Subject")
-            .unwrap_or_default();
+        let message = mail_parser::Message::parse(data.as_ref()).unwrap();
+
+        let sender = {
+            if let HeaderValue::Address(addr) = message.from() {
+                format!(
+                    "{} {}",
+                    addr.name.as_ref().unwrap(),
+                    addr.address.as_ref().unwrap()
+                )
+            } else {
+                "".to_owned()
+            }
+        };
+
+        let recipients = {
+            let mut list: Vec<String> = vec![];
+
+            if let HeaderValue::Address(addr) = message.to() {
+                list.push(format!("{}", addr.address.as_ref().unwrap().to_string()));
+            }
+
+            // if let HeaderValue::GroupList(group_list) = message.to() {
+            //     dbg!(&group_list);
+            //     for group in group_list {
+            //         // if let HeaderValue::Group(group) = item {
+            //         for address in &group.addresses {
+            //             list.push(address.address.as_ref().unwrap().to_string());
+            //         }
+            //         // }
+            //     }
+            // }
+            //
+            list
+        };
+        let subject = message.subject().unwrap_or(&"".to_owned()).to_string();
 
         let mut formats = vec!["source".to_owned()];
         let mut html: Option<String> = None;
         let mut plain: Option<String> = None;
-        let mut attachments: Vec<Attachment> = vec![];
 
-        let parts: Vec<ParsedMail> = if parsed.subparts.len() > 0 {
-            parsed.subparts
-        } else {
-            vec![parsed]
-        };
-
-        for part in parts {
-            if part.get_content_disposition().disposition == DispositionType::Attachment {
-                let mut attachment = Attachment::default();
-
-                attachment.file_type = part.ctype.mimetype.clone();
-                attachment.filename = part
-                    .get_content_disposition()
-                    .params
-                    .get("filename")
-                    .unwrap()
-                    .clone();
-
-                attachment.body = part.get_body_raw().unwrap();
-                attachment.cid = part.headers.get_first_value("Content-ID").unwrap();
-
-                attachments.push(attachment);
-            } else {
-                match part.ctype.mimetype.as_ref() {
-                    "text/html" => {
-                        formats.push("html".to_owned());
-                        html = part.get_body().ok();
-                    }
-                    "text/plain" => {
-                        formats.push("plain".to_owned());
-                        plain = part.get_body().ok();
-                    }
-                    _ => todo!(),
-                }
-            }
+        if message.html_body_count() > 0 {
+            formats.push("html".to_owned());
+            html = Some(message.body_html(0).unwrap().to_string());
         }
+
+        if message.text_body_count() > 0 {
+            formats.push("plain".to_owned());
+            plain = Some(message.body_text(0).unwrap().to_string());
+        }
+
+        use mail_parser::ContentType;
+        use mail_parser::MimeHeaders;
+
+        let attachments = message
+            .attachments()
+            .map(|attachment| Attachment {
+                filename: attachment
+                    .attachment_name()
+                    .unwrap_or("unknown")
+                    .to_string(),
+                file_type: attachment.content_type().unwrap().ctype().to_string(),
+                body: attachment.contents().to_vec(),
+                cid: attachment
+                    .content_id()
+                    .unwrap_or("unknown-content-id")
+                    .to_string(),
+            })
+            .collect();
 
         Self {
             id: None,
