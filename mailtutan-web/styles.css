@@ -370,6 +370,13 @@ body>header nav li a:focus {
   padding-top: 0
 }
 
+#message>header .metadata a,
+#message>header .metadata a:hover
+{
+  text-decoration: none;
+  color: #3B82EC;
+}
+
 #message>header .metadata dt,
 #message>header .metadata dd {
   padding: 10px;

@@ -62,6 +62,20 @@ pub fn MessageView(Props { message }: &Props) -> Html {
         format!("format tab {} {} {}", format, selected, hidden)
     };
 
+    let mut attachments: Vec<Html> = vec![];
+
+    for attachment in &message.attachments {
+        let link = format!(
+            "/api/messages/{}/parts/{}",
+            message.id.unwrap(),
+            attachment.cid
+        );
+
+        attachments.push(html! {
+            <a href={ link }>{ &attachment.filename }</a>
+        });
+    }
+
     html! {
       <article id="message">
         <header>
@@ -79,7 +93,9 @@ pub fn MessageView(Props { message }: &Props) -> Html {
             <dd class="subject">{ &message.subject }</dd>
 
             <dt class="attachments">{ "Attachments" }</dt>
-            <dd class="attachments"></dd>
+            <dd class="attachments">
+                { attachments }
+            </dd>
           </dl>
           <nav class="views">
             <ul>
