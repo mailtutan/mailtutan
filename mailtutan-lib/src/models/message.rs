@@ -61,17 +61,6 @@ impl From<&Vec<u8>> for Message {
                 list.push(format!("{}", addr.address.as_ref().unwrap().to_string()));
             }
 
-            // if let HeaderValue::GroupList(group_list) = message.to() {
-            //     dbg!(&group_list);
-            //     for group in group_list {
-            //         // if let HeaderValue::Group(group) = item {
-            //         for address in &group.addresses {
-            //             list.push(address.address.as_ref().unwrap().to_string());
-            //         }
-            //         // }
-            //     }
-            // }
-            //
             list
         };
         let subject = message.subject().unwrap_or(&"".to_owned()).to_string();
@@ -90,7 +79,6 @@ impl From<&Vec<u8>> for Message {
             plain = Some(message.body_text(0).unwrap().to_string());
         }
 
-        use mail_parser::ContentType;
         use mail_parser::MimeHeaders;
 
         let attachments = message
