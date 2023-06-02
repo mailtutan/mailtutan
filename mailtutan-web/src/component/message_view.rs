@@ -80,6 +80,8 @@ pub fn MessageView(Props { message }: &Props) -> Html {
     let iframe_height =
         (window().document().unwrap().body().unwrap().scroll_height() + 30).to_string();
 
+    let download_link = format!("/api/messages/{}/eml", message.id.unwrap());
+
     html! {
       <article id="message">
         <header>
@@ -106,7 +108,7 @@ pub fn MessageView(Props { message }: &Props) -> Html {
               <li onclick={&onclick} class={tab_classes("html")} data-message-format="html"><a href="#">{ "HTML" }</a></li>
               <li onclick={&onclick} class={tab_classes("plain")} data-message-format="plain"><a href="#">{ "Plain Text" }</a></li>
               <li onclick={&onclick} class={tab_classes("source")} data-message-format="source"><a href="#">{ "Source" }</a></li>
-              <li class="format tab" data-message-format="html"><a href="#"><span>{ "Download" }</span></a></li>
+              <li class="format tab" data-message-format="html"><a href={ download_link }><span>{ "Download" }</span></a></li>
             </ul>
           </nav>
         </header>
