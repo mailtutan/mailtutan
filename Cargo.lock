@@ -982,6 +982,7 @@ dependencies = [
  "futures",
  "gloo-dialogs",
  "gloo-net",
+ "gloo-utils",
  "log",
  "serde",
  "serde_json",

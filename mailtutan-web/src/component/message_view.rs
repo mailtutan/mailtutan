@@ -1,4 +1,5 @@
 use crate::Message;
+use gloo_utils::window;
 use web_sys::HtmlLiElement;
 use yew::prelude::*;
 
@@ -76,6 +77,9 @@ pub fn MessageView(Props { message }: &Props) -> Html {
         });
     }
 
+    let iframe_height =
+        (window().document().unwrap().body().unwrap().scroll_height() + 30).to_string();
+
     html! {
       <article id="message">
         <header>
@@ -106,7 +110,7 @@ pub fn MessageView(Props { message }: &Props) -> Html {
             </ul>
           </nav>
         </header>
-        <iframe class="body" src={ iframe_src }></iframe>
+        <iframe height={ iframe_height } scrolling="no" class="body" src={ iframe_src }></iframe>
       </article>
     }
 }
