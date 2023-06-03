@@ -1,20 +1,19 @@
 use crate::Message;
+use crate::State;
 use web_sys::{HtmlIFrameElement, HtmlLiElement};
 use yew::prelude::*;
-
-#[derive(Properties, PartialEq, Clone)]
-pub struct Props {
-    pub message: Option<Message>,
-}
+use yewdux::prelude::*;
 
 #[function_component]
-pub fn MessageView(Props { message }: &Props) -> Html {
-    if message.is_none() {
+pub fn MessageView() -> Html {
+    let (state, _) = use_store::<State>();
+
+    if state.selected_message.is_none() {
         return html!();
     }
 
+    let message = state.selected_message.as_ref().unwrap();
     let default_format = "source".to_owned();
-    let message = message.as_ref().unwrap();
 
     let selected_format = use_state(|| {
         for format in ["html", "plain", "source"].into_iter() {

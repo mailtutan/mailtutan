@@ -1,28 +1,24 @@
-use crate::Message;
+use crate::State;
 use yew::prelude::*;
+use yewdux::prelude::*;
 
 #[derive(Properties, PartialEq)]
 pub struct Props {
-    pub messages: Vec<Message>,
-    pub selected_message: Option<Message>,
     pub onclick: Callback<MouseEvent>,
 }
 
 #[function_component]
-pub fn MessageList(
-    Props {
-        messages,
-        onclick,
-        selected_message,
-    }: &Props,
-) -> Html {
-    let list = messages
+pub fn MessageList(Props { onclick }: &Props) -> Html {
+    let (state, _) = use_store::<State>();
+
+    let list = state
+        .messages
         .iter()
         .map(|message| {
-            let class = if selected_message.is_none() {
+            let class = if state.selected_message.is_none() {
                 ""
             } else {
-                if selected_message.as_ref().unwrap().id.unwrap() == message.id.unwrap() {
+                if state.selected_message.as_ref().unwrap().id.unwrap() == message.id.unwrap() {
                     "selected"
                 } else {
                     ""

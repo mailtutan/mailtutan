@@ -1,4 +1,5 @@
 use yew::prelude::*;
+use yewdux::prelude::*;
 
 mod api;
 mod component;
@@ -6,7 +7,7 @@ mod ws;
 
 use serde::Deserialize;
 
-#[derive(Clone, Properties, PartialEq, Deserialize, Default, Debug)]
+#[derive(Clone, Properties, PartialEq, Deserialize, Default, Debug, Eq)]
 pub struct Message {
     pub id: Option<usize>,
     pub sender: String,
@@ -24,12 +25,18 @@ pub struct MessageEvent {
     pub message: Message,
 }
 
-#[derive(Clone, PartialEq, Deserialize, Debug)]
+#[derive(Clone, PartialEq, Deserialize, Debug, Eq)]
 pub struct Attachment {
     pub cid: String,
     #[serde(rename = "type")]
     pub file_type: String,
     pub filename: String,
+}
+
+#[derive(Debug, Default, Clone, PartialEq, Eq, Store)]
+struct State {
+    messages: Vec<Message>,
+    selected_message: Option<Message>,
 }
 
 fn main() {
