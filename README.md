@@ -15,31 +15,11 @@ This is a repository for Mailtutan, a SMTP server built in Rust. The server allo
 
 ## Installation
 
-1. Clone this repository to your local machine using the following command:
+#### Cargo
+```
+cargo install mailtutan
+```
 
-   ```
-   git clone https://github.com/your-username/mailtutan.git
-   ```
-
-2. Change to the cloned directory:
-
-   ```
-   cd mailtutan
-   ```
-
-3. Build the project using Cargo:
-
-   ```
-   cargo build --release
-   ```
-
-4. Run the server:
-
-   ```
-   cargo run --release
-   ```
-
-   The server will start listening on the default SMTP port (1025) on your local machine.
 
 ## Configuration
 
