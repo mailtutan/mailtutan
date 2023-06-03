@@ -1,6 +1,6 @@
 [workspace.package]
 authors = ["Mohsen Alizadeh <mohsen@alizadeh.us>"]
-homepage= "https://github.com/mohsen-alizadeh/mailtutan"
+homepage= "https://github.com/mailtutan/mailtutan"
 version = "0.1.0"
 edition = "2021"
 
