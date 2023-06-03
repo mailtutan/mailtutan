@@ -2,10 +2,10 @@ use axum::http::StatusCode;
 use axum::response::Html;
 use axum::response::IntoResponse;
 
-static HTML: &[u8] = include_bytes!("../../../mailtutan-web/dist/index.html");
-static CSS: &[u8] = include_bytes!("../../../mailtutan-web/dist/styles.css");
-static JS: &[u8] = include_bytes!("../../../mailtutan-web/dist/mailtutan-web.js");
-static WASM: &[u8] = include_bytes!("../../../mailtutan-web/dist/mailtutan-web_bg.wasm");
+static HTML: &[u8] = include_bytes!("index.html");
+static CSS: &[u8] = include_bytes!("styles.css");
+static JS: &[u8] = include_bytes!("mailtutan-web.js");
+static WASM: &[u8] = include_bytes!("mailtutan-web_bg.wasm");
 
 pub async fn js() -> impl IntoResponse {
     (
