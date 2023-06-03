@@ -1,10 +1,10 @@
 
-all: build-web build
+all: build-web build-backend
 
 run:
 	cargo run -p mailtutan
 
-build:
+build-backend:
 	cargo build --release
 	strip target/release/mailtutan
 
