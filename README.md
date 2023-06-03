@@ -9,4 +9,4 @@ Inspired by [MailCatcher](https://mailcatcher.me/), easier to install, build in 
 
 Proadly built with Rust programming language.
 
-![screenshot-1](https://github.com/mailtutan/mailtutan/assets/4325532/be65304f-b890-489c-bd4b-58317a5bd868)
+![screenshot-1](https://raw.githubusercontent.com/mailtutan/mailtutan/main/screenshot-1.jpg)
