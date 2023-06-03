@@ -1,6 +1,5 @@
 use crate::Message;
-use gloo_utils::window;
-use web_sys::HtmlLiElement;
+use web_sys::{HtmlIFrameElement, HtmlLiElement};
 use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Clone)]
@@ -77,8 +76,22 @@ pub fn MessageView(Props { message }: &Props) -> Html {
         });
     }
 
-    let iframe_height =
-        (window().document().unwrap().body().unwrap().scroll_height() + 30).to_string();
+    let onload = {
+        Callback::from(move |e: Event| {
+            let element: HtmlIFrameElement = e.target_unchecked_into();
+
+            let h = element
+                .content_window()
+                .unwrap()
+                .document()
+                .unwrap()
+                .body()
+                .unwrap()
+                .scroll_height();
+
+            element.set_attribute("height", &h.to_string()).ok();
+        })
+    };
 
     let download_link = format!("/api/messages/{}/eml", message.id.unwrap());
 
@@ -112,7 +125,7 @@ pub fn MessageView(Props { message }: &Props) -> Html {
             </ul>
           </nav>
         </header>
-        <iframe height={ iframe_height } scrolling="no" class="body" src={ iframe_src }></iframe>
+        <iframe {onload} scrolling="no" class="body" src={ iframe_src }></iframe>
       </article>
     }
 }
