@@ -55,7 +55,6 @@ pub fn Root() -> Html {
                 .unwrap();
 
             if let Some(message) = state.messages.get(&id) {
-                log::info!("message clicked");
                 dispatch.reduce_mut(|state| state.selected_message = Some(message.clone()));
             }
         })
