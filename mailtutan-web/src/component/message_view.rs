@@ -17,11 +17,14 @@ pub fn MessageView(Props { message }: &Props) -> Html {
     let message = message.as_ref().unwrap();
 
     let selected_format = use_state(|| {
-        message
-            .formats
-            .last()
-            .unwrap_or_else(|| &default_format)
-            .to_owned()
+        for format in ["html", "plain", "source"].into_iter() {
+            let format = format.to_string();
+            if message.formats.contains(&format) {
+                return format;
+            }
+        }
+
+        return default_format;
     });
 
     let iframe_src = match message.id {
