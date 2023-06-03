@@ -6,13 +6,11 @@ version.workspace = true
 edition.workspace = true
 
 [dependencies]
-rust-smtp-server = "0.1.1"
-tokio = "1.26"
+tokio = { version = "1.26", features = ["full"] }
 async-trait = "0.1.67"
 axum = { version =  "0.6.18", features = ["ws"] }
 serde = { version = "1.0.163", features = ["derive"] }
 serde_json = "1.0.96"
-mailparse = "0.14.0"
 mailin-embedded = "0.8.0"
 chrono = "0.4.24"
 futures = "0.3.28"
