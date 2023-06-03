@@ -7,6 +7,7 @@ use axum::response::IntoResponse;
 use axum::Json;
 
 pub async fn index() -> Json<Vec<Message>> {
+    dbg!("start");
     Json(APP.get().unwrap().lock().unwrap().storage.list().to_vec())
 }
 

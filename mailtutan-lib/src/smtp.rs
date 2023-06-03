@@ -21,7 +21,13 @@ impl Handler for MyHandler {
         // dbg!("data end");
         let message = Message::from(&self.data);
 
-        let msg = APP.get().unwrap().lock().unwrap().storage.add(message);
+        let msg = APP
+            .get()
+            .expect("get app")
+            .lock()
+            .expect("get lock")
+            .storage
+            .add(message);
 
         let event = MessageEvent {
             event_type: "add".to_owned(),
@@ -29,9 +35,9 @@ impl Handler for MyHandler {
         };
 
         APP.get()
-            .unwrap()
+            .expect("get app")
             .lock()
-            .unwrap()
+            .expect("get lock")
             .ws_sender
             .clone()
             .send(serde_json::to_string(&event).unwrap())

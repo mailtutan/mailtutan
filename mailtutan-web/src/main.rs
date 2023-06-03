@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use yew::prelude::*;
 use yewdux::prelude::*;
 
@@ -34,7 +35,7 @@ pub struct Attachment {
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, Store)]
 struct State {
-    messages: Vec<Message>,
+    messages: HashMap<usize, Message>,
     selected_message: Option<Message>,
 }
 

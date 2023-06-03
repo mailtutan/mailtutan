@@ -1,9 +1,10 @@
 use crate::models::Message;
+use std::collections::HashMap;
 use std::sync::Mutex;
 use tokio::sync::broadcast::Sender;
 
 pub trait Storage: Sync + Send {
-    fn list(&self) -> &Vec<Message>;
+    fn list(&self) -> Vec<Message>;
     fn add(&mut self, message: Message) -> Message;
     fn get(&self, item: usize) -> &Message;
     fn size(&self) -> usize;
@@ -17,37 +18,43 @@ pub struct Connection {
 
 pub struct Memory {
     sequence_id: usize,
-    records: Vec<Message>,
+    records: HashMap<usize, Message>,
 }
 
 impl Memory {
     pub fn new() -> Self {
         Self {
-            records: vec![],
+            records: HashMap::new(),
             sequence_id: 1,
         }
     }
 }
 
 impl Storage for Memory {
-    fn list(&self) -> &Vec<Message> {
-        &self.records
+    fn list(&self) -> Vec<Message> {
+        let mut v: Vec<Message> = vec![];
+
+        for (_, m) in &self.records {
+            v.push(m.clone());
+        }
+
+        v
     }
 
     fn add(&mut self, mut message: Message) -> Message {
         message.id = Some(self.sequence_id);
 
-        self.sequence_id += 1;
-
         let clone = message.clone();
 
-        self.records.push(message);
+        self.records.insert(self.sequence_id, message);
+
+        self.sequence_id += 1;
 
         clone
     }
 
     fn get(&self, item: usize) -> &Message {
-        &self.records.get(item - 1).unwrap()
+        &self.records.get(&item).unwrap()
     }
 
     #[allow(dead_code)]

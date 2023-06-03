@@ -54,7 +54,7 @@ pub fn Root() -> Html {
                 .parse::<usize>()
                 .unwrap();
 
-            if let Some(message) = state.messages.get(id - 1) {
+            if let Some(message) = state.messages.get(&id) {
                 log::info!("message clicked");
                 dispatch.reduce_mut(|state| state.selected_message = Some(message.clone()));
             }
@@ -79,7 +79,7 @@ pub fn Root() -> Html {
 
                     dispatch.reduce_mut(|state| {
                         for message in fetched_messages {
-                            state.messages.push(message.clone());
+                            state.messages.insert(message.id.unwrap(), message.clone());
                         }
                     });
                 });
@@ -99,10 +99,9 @@ pub fn Root() -> Html {
                 while let Some(msg) = read.next().await {
                     if let Ok(websocket::Message::Text(msg)) = msg {
                         if let Ok(m) = serde_json::from_str::<MessageEvent>(&msg) {
-                            log::info!("a message received");
-                            log::info!("{:?}", m.message.id.ok_or("none"));
-
-                            dispatch.reduce_mut(|state| state.messages.push(m.message));
+                            dispatch.reduce_mut(|state| {
+                                state.messages.insert(m.message.id.unwrap(), m.message)
+                            });
                         }
                     }
                 }

@@ -14,7 +14,7 @@ pub fn MessageList(Props { onclick }: &Props) -> Html {
     let list = state
         .messages
         .iter()
-        .map(|message| {
+        .map(|(_id, message)| {
             let class = if state.selected_message.is_none() {
                 ""
             } else {
