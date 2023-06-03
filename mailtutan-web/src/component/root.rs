@@ -1,11 +1,9 @@
 use yew::prelude::*;
-use yewdux::dispatch;
 
 use crate::api;
 use crate::component::header::Header;
 use crate::component::message_list::MessageList;
 use crate::component::message_view::MessageView;
-use crate::ws;
 use crate::Message;
 use crate::MessageEvent;
 use crate::State;
@@ -14,13 +12,10 @@ use gloo_dialogs::confirm;
 use gloo_net::http::Request;
 use gloo_net::websocket::{self, futures::WebSocket};
 use wasm_bindgen_futures::spawn_local;
-use yew::prelude::*;
 use yewdux::prelude::*;
 
 use std::sync::Once;
 use web_sys::HtmlTableCellElement;
-
-use yewdux::prelude::*;
 
 static WS_ONCE: Once = Once::new();
 

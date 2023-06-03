@@ -1,4 +1,3 @@
-use crate::Message;
 use crate::State;
 use web_sys::{HtmlIFrameElement, HtmlLiElement};
 use yew::prelude::*;

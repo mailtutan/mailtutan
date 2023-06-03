@@ -19,7 +19,6 @@ pub fn Header(Props { clear_onclick }: &Props) -> Html {
           <ul>
             <li class="search hidden"><input type="search" name="search" placeholder="Search messages..." incremental="true" /></li>
             <li class="clear"><a href="#" onclick={clear_onclick} title="Clear all messages">{ "Clear" }</a></li>
-              <li class="quit"><a href="#" title="Quit Mailtutan">{ "Quit" }</a></li>
           </ul>
         </nav>
         </header>

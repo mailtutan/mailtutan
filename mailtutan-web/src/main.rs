@@ -3,7 +3,6 @@ use yewdux::prelude::*;
 
 mod api;
 mod component;
-mod ws;
 
 use serde::Deserialize;
 
