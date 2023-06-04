@@ -5,6 +5,7 @@ homepage.workspace = true
 version.workspace = true
 edition.workspace = true
 license.workspace = true
+readme.workspace = true
 description = "a fake smtp server for test and development environments written in Rust - binary executable"
 
 [dependencies]
