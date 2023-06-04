@@ -1,6 +1,7 @@
 use chrono::Local;
 use mail_parser;
 use serde::Serialize;
+use uuid::Uuid;
 
 #[derive(Serialize, Debug, Default, Clone)]
 pub struct Message {
@@ -90,10 +91,7 @@ impl From<&Vec<u8>> for Message {
                     .to_string(),
                 file_type: attachment.content_type().unwrap().ctype().to_string(),
                 body: attachment.contents().to_vec(),
-                cid: attachment
-                    .content_id()
-                    .unwrap_or("unknown-content-id")
-                    .to_string(),
+                cid: Uuid::new_v4().to_string(),
             })
             .collect();
 
