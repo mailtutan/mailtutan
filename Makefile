@@ -13,3 +13,8 @@ build-web:
 
 trunk:
 	(cd mailtutan-web && trunk serve --proxy-backend="http://localhost:1080/api/")
+
+publish:
+	cargo publish -p mailtutan-web
+	cargo publish -p mailtutan-lib
+	cargo publish -p mailtutan
