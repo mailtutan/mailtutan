@@ -18,3 +18,13 @@ publish:
 	cargo publish -p mailtutan-web
 	cargo publish -p mailtutan-lib
 	cargo publish -p mailtutan
+
+VERSION := $(shell toml get Cargo.toml workspace.package.version --raw)
+
+docker-build:
+	docker build . -t mailtutan/mailtutan:$(VERSION)
+
+docker-push:
+	docker tag mailtutan/mailtutan:$(VERSION) mailtutan/mailtutan:latest
+	docker push mailtutan/mailtutan:$(VERSION)
+	docker push mailtutan/mailtutan:latest
