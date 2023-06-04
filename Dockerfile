@@ -1,19 +1,15 @@
 FROM rust:1-alpine3.16
 
-# This is important, see https://github.com/rust-lang/docker-rust/issues/85
-ENV RUSTFLAGS="-C target-feature=-crt-static"
-
 RUN apk add --no-cache musl-dev
 
 WORKDIR /app
 COPY ./ /app
 
-RUN cargo build --release
-RUN strip target/release/mailtutan
+RUN cargo build --release --target x86_64-unknown-linux-musl
+RUN strip target/x86_64-unknown-linux-musl/release/mailtutan
 
-FROM alpine:3.16
-RUN apk add --no-cache libgcc
+FROM gcr.io/distroless/static-debian11
 
-COPY --from=0 /app/target/release/mailtutan .
+COPY --from=0 /app/target/x86_64-unknown-linux-musl/release/mailtutan .
 
 ENTRYPOINT ["/mailtutan"]
