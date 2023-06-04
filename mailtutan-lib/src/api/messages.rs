@@ -87,13 +87,20 @@ pub async fn download_attachment(Path((id, cid)): Path<(usize, String)>) -> impl
         if attachment.cid == cid {
             return (
                 StatusCode::OK,
-                [("Content-Disposition", "attachment; filename=\"attachment\"")],
+                [(
+                    "Content-Disposition",
+                    format!("attachment; filename=\"{}\"", attachment.filename),
+                )],
                 attachment.body.clone(),
             );
         }
     }
 
-    (StatusCode::OK, [("Content-Type", "message/rfc822")], vec![])
+    (
+        StatusCode::OK,
+        [("Content-Type", "message/rfc822".to_string())],
+        vec![],
+    )
 }
 
 pub async fn show_json(Path(id): Path<usize>) -> Json<Message> {
