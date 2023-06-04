@@ -20,10 +20,14 @@ This is a repository for Mailtutan, a SMTP server built in Rust. The server allo
 cargo install mailtutan
 ```
 
+### Docker
+```
+docker run -p 1080:1080 -p 1025:1025 -d mailtutan/mailtutan:latest
+```
 
 ## Configuration
 
-By default, Mailtutan listens on port 1025 and logs incoming emails to memory. However, you can customize the server configuration by supported parameters and environment variables
+By default, Mailtutan listens on port 1025 for SMTP and logs incoming emails to memory. The web interface is available on port 1080. However, you can customize the server configuration by supported parameters and environment variables
 
 ## Usage
 
