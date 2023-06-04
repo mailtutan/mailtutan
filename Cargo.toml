@@ -1,10 +1,10 @@
 [workspace.package]
 authors = ["Mohsen Alizadeh <mohsen@alizadeh.us>"]
 homepage= "https://github.com/mailtutan/mailtutan"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "MIT"
-readme = "../README.md"
+readme = "README.md"
 
 [profile.release]
 opt-level = 'z'
