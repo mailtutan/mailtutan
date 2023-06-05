@@ -18,6 +18,30 @@ pub struct Config {
     /// SMTP Port number
     #[arg(long = "smtp-port", env("MAILTUTAN_SMTP_PORT"), default_value_t = 1025)]
     pub smtp_port: u16,
+
+    /// HTTP Auth
+    #[arg(
+        long = "http-auth",
+        env("MAILTUTAN_HTTP_AUTH"),
+        default_value_t = false
+    )]
+    pub http_auth: bool,
+
+    /// HTTP Username
+    #[arg(
+        long = "http-username",
+        env("MAILTUTAN_HTTP_USERNAME"),
+        default_value = "admin"
+    )]
+    pub http_username: String,
+
+    /// HTTP Password
+    #[arg(
+        long = "http-password",
+        env("MAILTUTAN_HTTP_PASSWORD"),
+        default_value = "admin"
+    )]
+    pub http_password: String,
 }
 
 impl Config {
@@ -30,6 +54,9 @@ impl Config {
             ip: self.ip,
             http_port: self.http_port,
             smtp_port: self.smtp_port,
+            http_username: self.http_username.clone(),
+            http_password: self.http_password.clone(),
+            http_auth: self.http_auth,
             storage: Box::new(Memory::new()),
             ws_sender: broadcast::channel(100).0,
         }
