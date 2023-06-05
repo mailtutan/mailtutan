@@ -16,6 +16,9 @@ pub struct Mailtutan {
     pub smtp_port: u16,
     pub storage: Box<dyn Storage + 'static>,
     pub ws_sender: Sender<String>,
+    pub http_auth: bool,
+    pub http_username: String,
+    pub http_password: String,
 }
 
 impl Mailtutan {
