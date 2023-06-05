@@ -1,13 +1,4 @@
-use std::convert::Infallible;
-
-use axum::{
-    body::{Bytes, Full},
-    headers::HeaderMapExt,
-    response::IntoResponse,
-    routing::delete,
-    routing::get,
-    Router,
-};
+use axum::{headers::HeaderMapExt, response::IntoResponse, routing::delete, routing::get, Router};
 
 use crate::APP;
 
@@ -17,51 +8,38 @@ mod version;
 mod websocket;
 
 use axum::{
-    extract::TypedHeader,
-    headers::authorization::{Authorization, Bearer},
+    headers::authorization::{Authorization, Basic},
     http::Request,
     http::StatusCode,
-    middleware::{self, Next},
+    middleware::Next,
     response::Response,
 };
-// use axum::response::IntoResponse;
-// async fn auth<B>(
-//     TypedHeader(auth): TypedHeader<Authorization<Bearer>>,
-//     request: Request<B>,
-//     next: Next<B>,
-// ) -> Result<Response, StatusCode> {
-//     if token_is_valid(auth.token()) {
-//         let response = next.run(request).await;
-//         Ok(response)
-//     } else {
-//         Err(StatusCode::UNAUTHORIZED)
-//     }
-// }
-//
-// fn token_is_valid(token: &str) -> bool {
-//     false
-// }
 
 async fn auth<B>(request: Request<B>, next: Next<B>) -> Response {
-    let b = request.headers().typed_get::<Authorization<Bearer>>();
+    if let Some(credential) = request.headers().typed_get::<Authorization<Basic>>() {
+        if let Some(app) = APP.get() {
+            let valid = {
+                if let Ok(app) = app.lock() {
+                    app.http_username == credential.0.username()
+                        && app.http_password == credential.0.password()
+                } else {
+                    false
+                }
+            };
 
-    if b.is_none() {
-        dbg!("it is none");
-        let mut res = (StatusCode::UNAUTHORIZED, "nothing").into_response();
-        res.headers_mut().insert(
-            "WWW-Authenticate",
-            "Basic realm=\"Mailtutan\"".parse().unwrap(),
-        );
-        return res;
+            if valid {
+                let res = next.run(request).await;
+                return res;
+            }
+        }
     }
 
-    b.unwrap().0.username();
-    // dbg!(&b.usern;
-
-    let response = next.run(request).await;
-
-    return response;
-    // do something with `response`...
+    let mut res = (StatusCode::UNAUTHORIZED, "Authorization is required").into_response();
+    res.headers_mut().insert(
+        "WWW-Authenticate",
+        "Basic realm=\"Mailtutan\"".parse().unwrap(),
+    );
+    return res;
 }
 pub async fn serve() {
     let app = Router::new()
@@ -81,8 +59,15 @@ pub async fn serve() {
             get(messages::download_attachment),
         )
         .route("/api/messages", delete(messages::delete_all))
-        .route("/api/version", get(version::show))
-        .route_layer(axum::middleware::from_fn(auth));
+        .route("/api/version", get(version::show));
+
+    let app = {
+        if APP.get().unwrap().lock().unwrap().http_auth {
+            app.route_layer(axum::middleware::from_fn(auth))
+        } else {
+            app
+        }
+    };
 
     let uri = APP.get().unwrap().lock().unwrap().get_api_uri();
 
