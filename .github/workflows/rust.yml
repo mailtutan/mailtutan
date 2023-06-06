@@ -16,6 +16,27 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Set up cargo cache
+      uses: actions/cache@v3
+      continue-on-error: false
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: ${{ runner.os }}-cargo-
+
+    - name: Install cargo check tools
+      run: |
+        cargo install --locked cargo-deny || true
+        cargo install --locked cargo-outdated || true
+        cargo install --locked cargo-udeps || true
+        cargo install --locked cargo-audit || true
+        cargo install --locked cargo-pants || true
+
     - name: Install Wasm32
       run: rustup target add wasm32-unknown-unknown
 
@@ -25,8 +46,15 @@ jobs:
     - name: Install trunk
       run: cargo install --locked trunk
 
-    - name: Check Clipy
-      run: cargo clippy
+    - name: Check
+      run: |
+        cargo deny check
+        cargo outdated --exit-code 1
+        cargo udeps
+        rm -rf ~/.cargo/advisory-db
+        cargo audit
+        cargo pants
+        cargo clippy
 
     - name: Build
       run: make all
