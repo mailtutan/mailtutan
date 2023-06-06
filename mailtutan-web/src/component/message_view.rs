@@ -22,7 +22,7 @@ pub fn MessageView() -> Html {
             }
         }
 
-        return default_format;
+        default_format
     });
 
     let iframe_src = match message.id {

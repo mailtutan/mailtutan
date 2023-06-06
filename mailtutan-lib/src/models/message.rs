@@ -59,12 +59,12 @@ impl From<&Vec<u8>> for Message {
             let mut list: Vec<String> = vec![];
 
             if let HeaderValue::Address(addr) = message.to() {
-                list.push(format!("{}", addr.address.as_ref().unwrap().to_string()));
+                list.push(format!("{}", addr.address.as_ref().unwrap()));
             }
 
             list
         };
-        let subject = message.subject().unwrap_or(&"".to_owned()).to_string();
+        let subject = message.subject().unwrap_or("").to_string();
 
         let mut formats = vec!["source".to_owned()];
         let mut html: Option<String> = None;
