@@ -9,6 +9,7 @@ This is a repository for Mailtutan, a SMTP server built in Rust. The server allo
 - Simulates an SMTP server locally for testing and development.
 - Logs all incoming emails, including the headers and body.
 - Provides a web interface and REST API to view the list of emails.
+- Basic HTTP Authentication on web interface and REST API ( rfc7617 )
 - Supports multiple client connections simultaneously.
 - Supports real-time updates using WebSockets for the web interface.
 - Lightweight and efficient implementation in Rust. The docker image on docker hub is < 2MB.
