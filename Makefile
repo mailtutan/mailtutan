@@ -9,7 +9,7 @@ build-backend:
 	strip target/release/mailtutan
 
 build-web:
-	(cd mailtutan-web && cargo build && trunk build)
+	(cd mailtutan-web && cargo build && trunk build --release)
 
 trunk:
 	(cd mailtutan-web && trunk serve --proxy-backend="http://localhost:1080/api/")
