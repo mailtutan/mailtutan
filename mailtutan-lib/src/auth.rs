@@ -32,5 +32,5 @@ pub async fn basic<B>(request: Request<B>, next: Next<B>) -> Response {
         "WWW-Authenticate",
         "Basic realm=\"Mailtutan\"".parse().unwrap(),
     );
-    return res;
+    res
 }

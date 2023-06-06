@@ -16,6 +16,7 @@ pub struct Connection {
     pub ws_sender: Sender<String>,
 }
 
+#[derive(Default)]
 pub struct Memory {
     sequence_id: usize,
     records: HashMap<usize, Message>,
@@ -32,13 +33,13 @@ impl Memory {
 
 impl Storage for Memory {
     fn list(&self) -> Vec<Message> {
-        let mut v: Vec<Message> = vec![];
+        let mut list: Vec<Message> = vec![];
 
-        for (_, m) in &self.records {
-            v.push(m.clone());
+        for record in self.records.values() {
+            list.push(record.clone());
         }
 
-        v
+        list
     }
 
     fn add(&mut self, mut message: Message) -> Message {
@@ -54,7 +55,7 @@ impl Storage for Memory {
     }
 
     fn get(&self, item: usize) -> &Message {
-        &self.records.get(&item).unwrap()
+        self.records.get(&item).unwrap()
     }
 
     #[allow(dead_code)]

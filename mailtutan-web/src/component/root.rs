@@ -41,6 +41,7 @@ pub fn Root() -> Html {
 
     // click on message in message list
     let onclick = {
+        #[allow(clippy::redundant_clone)]
         let state = state.clone();
         let dispatch = dispatch.clone();
 

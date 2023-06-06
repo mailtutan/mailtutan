@@ -13,16 +13,14 @@ pub fn MessageList(Props { onclick }: &Props) -> Html {
 
     let list = state
         .messages
-        .iter()
-        .map(|(_id, message)| {
+        .values()
+        .map(|message| {
             let class = if state.selected_message.is_none() {
                 ""
+            } else if state.selected_message.as_ref().unwrap().id.unwrap() == message.id.unwrap() {
+                "selected"
             } else {
-                if state.selected_message.as_ref().unwrap().id.unwrap() == message.id.unwrap() {
-                    "selected"
-                } else {
-                    ""
-                }
+                ""
             };
 
             html! {

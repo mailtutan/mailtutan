@@ -8,7 +8,7 @@ use futures::{sink::SinkExt, stream::StreamExt};
 use crate::APP;
 
 pub async fn websocket_handler(ws: WebSocketUpgrade) -> impl IntoResponse {
-    ws.on_upgrade(|socket| websocket(socket))
+    ws.on_upgrade(websocket)
 }
 
 async fn websocket(stream: WebSocket) {
