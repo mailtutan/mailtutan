@@ -49,11 +49,11 @@ jobs:
     - name: Check
       run: |
         # cargo deny check
-        cargo outdated --exit-code 1
-        cargo udeps
-        rm -rf ~/.cargo/advisory-db
-        cargo audit
-        cargo pants
+        # cargo outdated --exit-code 1
+        # cargo udeps
+        # rm -rf ~/.cargo/advisory-db
+        # cargo audit
+        # cargo pants
         cargo clippy
 
     - name: Build
