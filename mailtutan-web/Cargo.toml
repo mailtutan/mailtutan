@@ -6,7 +6,8 @@ version.workspace = true
 edition.workspace = true
 license.workspace = true
 readme.workspace = true
-description = "a fake smtp server for test and development environments written in Rust - web interface"
+keywords.workspace = true
+description = "The Frontend developed for mailtutan project which is an SMTP server for test and development environments."
 
 [dependencies]
 yew = { version = "0.20.0", features = ["csr"] }
