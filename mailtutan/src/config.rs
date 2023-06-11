@@ -1,7 +1,18 @@
 use clap::Parser;
+use clap::ValueEnum;
+use mailtutan_lib::storage::Memdir;
+use mailtutan_lib::storage::Storage;
 use mailtutan_lib::{storage::Memory, Mailtutan};
 use std::net::Ipv4Addr;
 use tokio::sync::broadcast;
+
+#[derive(Clone, Debug, ValueEnum)]
+pub enum StorageType {
+    #[clap(value_enum)]
+    Memory,
+    #[clap(value_enum)]
+    Maildir,
+}
 
 /// Mailtutan
 #[derive(Parser, Debug)]
@@ -50,6 +61,18 @@ pub struct Config {
         default_value_t = 1000
     )]
     pub messages_limit: usize,
+
+    /// Storage
+    #[arg(long = "storage", env("MAILTUTAN_STORAGE"), default_value = "memory")]
+    pub storage: StorageType,
+
+    /// Storage
+    #[arg(
+        long = "maildir-path",
+        env("MAILTUTAN_MAILDIR_PATH"),
+        default_value = "maildir"
+    )]
+    pub maildir_path: String,
 }
 
 impl Config {
@@ -58,6 +81,11 @@ impl Config {
     }
 
     pub fn build(&self) -> Mailtutan {
+        let storage: Box<dyn Storage + 'static> = match self.storage {
+            StorageType::Memory => Box::new(Memory::new(self.messages_limit)),
+            StorageType::Maildir => Box::new(Memdir::new(self.messages_limit, &self.maildir_path)),
+        };
+
         Mailtutan {
             ip: self.ip,
             http_port: self.http_port,
@@ -65,7 +93,7 @@ impl Config {
             http_username: self.http_username.clone(),
             http_password: self.http_password.clone(),
             http_auth: self.http_auth,
-            storage: Box::new(Memory::new(self.messages_limit)),
+            storage,
             ws_sender: broadcast::channel(100).0,
             messages_limit: self.messages_limit,
         }
