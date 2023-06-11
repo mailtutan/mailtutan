@@ -91,7 +91,15 @@ pub fn Root() -> Html {
     // start web socket
     {
         WS_ONCE.call_once(move || {
-            let ws = WebSocket::open("ws://127.0.0.1:1080/ws").unwrap();
+            let ws_url = {
+                let href = web_sys::window().unwrap().location().href().unwrap();
+                let mut url = url::Url::parse(&href).unwrap();
+                url.set_scheme("ws").unwrap();
+                url.set_path("/ws");
+                url
+            };
+
+            let ws = WebSocket::open(&ws_url.to_string()).unwrap();
 
             let (_, mut read) = ws.split();
 
