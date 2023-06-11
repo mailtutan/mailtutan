@@ -61,7 +61,20 @@ Options:
 
 To send emails to Mailtutan, configure your email client or application to use the server's IP address or hostname and the configured port number. Any emails sent to this server will be captured and logged.
 
-You can access the web interface to view the list of logged emails by navigating to `http://localhost:1080` in your web browser. Additionally, a REST API is available at `http://localhost:1080/api/messages` to programmatically access the email data.
+You can access the web interface to view the list of logged emails by navigating to `http://localhost:1080` in your web browser. Additionally, a REST API is available at `http://localhost:1080/api/` to programmatically access the email data.
+
+## API
+|HTTP method | endpoint | description|
+|---|---|---|
+|GET|/api/messages| get list of messages|
+|GET|/api/messages/:id/json| get message's details|
+|GET|/api/messages/:id/source| get message's source|
+|GET|/api/messages/:id/plain| get message's plain text|
+|GET|/api/messages/:id/html| get message's HTML|
+|GET|/api/messages/:id/parts/:cid| get message's attachment|
+|GET|/api/version| get application version|
+|GET|/api/ws| subscribe to web socket to get updates|
+
 
 ## Contributing
 
