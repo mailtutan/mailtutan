@@ -86,7 +86,7 @@ mod tests {
 
     #[test]
     fn test_store() {
-        let mut store = Memory::new();
+        let mut store = Memory::new(1000);
 
         store.add(Message {
             ..Default::default()
