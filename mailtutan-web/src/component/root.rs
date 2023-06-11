@@ -94,7 +94,11 @@ pub fn Root() -> Html {
             let ws_url = {
                 let href = web_sys::window().unwrap().location().href().unwrap();
                 let mut url = url::Url::parse(&href).unwrap();
-                url.set_scheme("ws").unwrap();
+                if url.scheme() == "https" {
+                    url.set_scheme("wss").unwrap();
+                } else {
+                    url.set_scheme("ws").unwrap();
+                }
                 url.set_path("/ws");
                 url
             };
