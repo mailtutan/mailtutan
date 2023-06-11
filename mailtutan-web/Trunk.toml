@@ -1,3 +1,10 @@
 [build]
 release = true
 filehash = false
+
+[[proxy]]
+backend = "ws://localhost:1080/ws"
+ws = true
+
+[[proxy]]
+backend = "http://localhost:1080/api/"
