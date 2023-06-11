@@ -1,4 +1,4 @@
-use crate::State;
+use crate::{Message, State};
 use yew::prelude::*;
 use yewdux::prelude::*;
 
@@ -11,9 +11,12 @@ pub struct Props {
 pub fn MessageList(Props { onclick }: &Props) -> Html {
     let (state, _) = use_store::<State>();
 
-    let list = state
-        .messages
-        .values()
+    let mut messages: Vec<&Message> = state.messages.values().collect();
+
+    messages.sort_by(|a, b| b.id.cmp(&a.id));
+
+    let list = messages
+        .iter()
         .map(|message| {
             let class = if state.selected_message.is_none() {
                 ""
