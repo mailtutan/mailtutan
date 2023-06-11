@@ -142,6 +142,14 @@ impl Storage for Memdir {
         let mut file = fs::File::create(self.path.join(filename)).unwrap();
         file.write_all(&message.source).unwrap();
 
+        if self.size() > self.messages_limit {
+            let record_to_delete = self.sequence_id - self.messages_limit;
+
+            let path = self.path.join(format!("{}.eml", record_to_delete));
+
+            fs::remove_file(path).unwrap();
+        }
+
         self.sequence_id += 1;
 
         message
