@@ -41,19 +41,29 @@ Check out the latest release
 By default, Mailtutan listens on port 1025 for SMTP and logs incoming emails to memory. The web interface is available on port 1080. However, you can customize the server configuration by supported parameters and environment variables.
 ```
 $ mailtutan -h
-a fake smtp server for test and development environments written in Rust - binary executable
+An SMTP server for test and development environments.
 
 Usage: mailtutan [OPTIONS]
 
 Options:
-      --ip <IP>                        IPv4 address [env: MAILTUTAN_IPADDR=] [default: 0.0.0.0]
-      --http-port <HTTP_PORT>          HTTP Port number [env: MAILTUTAN_HTTP_PORT=] [default: 1080]
-      --smtp-port <SMTP_PORT>          SMTP Port number [env: MAILTUTAN_SMTP_PORT=] [default: 1025]
-      --http-auth                      HTTP Auth [env: MAILTUTAN_HTTP_AUTH=]
-      --http-username <HTTP_USERNAME>  HTTP Username [env: MAILTUTAN_HTTP_USERNAME=] [default: admin]
-      --http-password <HTTP_PASSWORD>  HTTP Password [env: MAILTUTAN_HTTP_PASSWORD=] [default: admin]
-  -h, --help                           Print help
-  -V, --version                        Print version
+      --ip <IP>
+          IPv4 address [env: MAILTUTAN_IPADDR=] [default: 0.0.0.0]
+      --http-port <HTTP_PORT>
+          HTTP Port number [env: MAILTUTAN_HTTP_PORT=] [default: 1080]
+      --smtp-port <SMTP_PORT>
+          SMTP Port number [env: MAILTUTAN_SMTP_PORT=] [default: 1025]
+      --http-auth
+          HTTP Auth [env: MAILTUTAN_HTTP_AUTH=]
+      --http-username <HTTP_USERNAME>
+          HTTP Username [env: MAILTUTAN_HTTP_USERNAME=] [default: admin]
+      --http-password <HTTP_PASSWORD>
+          HTTP Password [env: MAILTUTAN_HTTP_PASSWORD=] [default: admin]
+      --messages-limit <MESSAGES_LIMIT>
+          Messages Limit [env: MAILTUTAN_MESSAGES_LIMIT=] [default: 1000]
+  -h, --help
+          Print help
+  -V, --version
+          Print version
 ```
 
 
