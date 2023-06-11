@@ -20,6 +20,7 @@ pub struct Mailtutan {
     pub http_auth: bool,
     pub http_username: String,
     pub http_password: String,
+    pub messages_limit: usize,
 }
 
 impl Mailtutan {

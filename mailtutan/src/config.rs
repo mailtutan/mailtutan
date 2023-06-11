@@ -42,6 +42,14 @@ pub struct Config {
         default_value = "admin"
     )]
     pub http_password: String,
+
+    /// Messages Limit
+    #[arg(
+        long = "messages-limit",
+        env("MAILTUTAN_MESSAGES_LIMIT"),
+        default_value_t = 1000
+    )]
+    pub messages_limit: usize,
 }
 
 impl Config {
@@ -57,8 +65,9 @@ impl Config {
             http_username: self.http_username.clone(),
             http_password: self.http_password.clone(),
             http_auth: self.http_auth,
-            storage: Box::new(Memory::new()),
+            storage: Box::new(Memory::new(self.messages_limit)),
             ws_sender: broadcast::channel(100).0,
+            messages_limit: self.messages_limit,
         }
     }
 }

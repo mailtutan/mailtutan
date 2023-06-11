@@ -19,14 +19,16 @@ pub struct Connection {
 #[derive(Default)]
 pub struct Memory {
     sequence_id: usize,
+    messages_limit: usize,
     records: HashMap<usize, Message>,
 }
 
 impl Memory {
-    pub fn new() -> Self {
+    pub fn new(capacity: usize) -> Self {
         Self {
             records: HashMap::new(),
             sequence_id: 1,
+            messages_limit: capacity,
         }
     }
 }
@@ -48,6 +50,13 @@ impl Storage for Memory {
         let clone = message.clone();
 
         self.records.insert(self.sequence_id, message);
+
+        // delete oldest record
+        if self.records.len() > self.messages_limit {
+            self.records
+                .remove(&(self.sequence_id - self.messages_limit))
+                .unwrap();
+        }
 
         self.sequence_id += 1;
 
