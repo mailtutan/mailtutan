@@ -3,7 +3,7 @@ use mailtutan_lib::*;
 mod config;
 use config::Config;
 
-use tokio::runtime::Builder;
+use tokio::{self, runtime::Builder, signal};
 
 #[tokio::main]
 async fn main() {
@@ -11,12 +11,13 @@ async fn main() {
 
     let runtime = Builder::new_multi_thread().enable_all().build().unwrap();
 
-    let mut tasks = vec![];
-
-    tasks.push(runtime.spawn(api::serve()));
-    tasks.push(runtime.spawn(smtp::serve()));
-
-    for task in tasks {
-        task.await.unwrap();
+    tokio::select! {
+        _ = runtime.spawn(api::serve()) => {
+        }
+        _ = runtime.spawn(smtp::serve()) => {
+        }
+        _ = signal::ctrl_c() => {
+        }
     }
+    runtime.shutdown_background();
 }
