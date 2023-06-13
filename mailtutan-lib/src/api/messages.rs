@@ -25,6 +25,12 @@ pub async fn show_source(Path(id): Path<usize>) -> impl IntoResponse {
     )
 }
 
+pub async fn delete(Path(id): Path<usize>) -> impl IntoResponse {
+    APP.get().unwrap().lock().unwrap().storage.remove(id);
+
+    StatusCode::OK
+}
+
 pub async fn show_plain(Path(id): Path<usize>) -> impl IntoResponse {
     (
         StatusCode::OK,

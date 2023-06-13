@@ -87,6 +87,8 @@ You can access the web interface to view the list of logged emails by navigating
 |GET|/api/messages/:id/plain| get message's plain text|
 |GET|/api/messages/:id/html| get message's HTML|
 |GET|/api/messages/:id/parts/:cid| get message's attachment|
+|DELETE|/api/messages/:id| delete a message|
+|DELETE|/api/messages| delete all messages|
 |GET|/api/version| get application version|
 |GET|/api/ws| subscribe to web socket to get updates|
 
