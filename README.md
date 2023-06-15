@@ -105,7 +105,3 @@ This project is licensed under the [MIT License](LICENSE.txt). Feel free to use,
 
 - This project was inspired by the need for a lightweight fake SMTP server for testing and development purposes.
 - Thanks to the Rust programming language community for providing excellent tools and libraries for building efficient and reliable software.
-
-## Contact
-
-If you have any questions or need further assistance, feel free to contact the project maintainer at mohsen@alizadeh.us.
