@@ -1,6 +1,8 @@
 use crate::models::Message;
 use crate::models::MessageEvent;
 use crate::APP;
+use mailin::AuthMechanism;
+use mailin_embedded::response::{self, Response};
 use mailin_embedded::{Handler, Server, SslConfig};
 use std::io;
 
@@ -43,6 +45,23 @@ impl Handler for MyHandler {
 
         mailin_embedded::response::OK
     }
+
+    fn auth_plain(
+        &mut self,
+        _authorization_id: &str,
+        authentication_id: &str,
+        password: &str,
+    ) -> Response {
+        let app = APP.get().unwrap().lock().unwrap();
+
+        if authentication_id == app.smtp_auth_username.as_ref().unwrap()
+            && password == app.smtp_auth_password.as_ref().unwrap()
+        {
+            response::AUTH_OK
+        } else {
+            response::INVALID_CREDENTIALS
+        }
+    }
 }
 
 pub async fn serve() {
@@ -70,6 +89,10 @@ pub async fn serve() {
         .expect("SslConfig error")
         .with_addr(&uri)
         .unwrap();
+
+    if APP.get().unwrap().lock().unwrap().is_smtp_auth_enabled() {
+        server.with_auth(AuthMechanism::Plain);
+    }
 
     println!("listening on smtp://{}", &uri);
 

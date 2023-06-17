@@ -23,6 +23,8 @@ pub struct Mailtutan {
     pub messages_limit: usize,
     pub smtp_cert_path: Option<String>,
     pub smtp_key_path: Option<String>,
+    pub smtp_auth_username: Option<String>,
+    pub smtp_auth_password: Option<String>,
 }
 
 impl Mailtutan {
@@ -36,5 +38,9 @@ impl Mailtutan {
 
     pub fn init(self) {
         APP.get_or_init(|| Mutex::new(self));
+    }
+
+    pub fn is_smtp_auth_enabled(&self) -> bool {
+        self.smtp_auth_username.is_some() && self.smtp_auth_password.is_some()
     }
 }

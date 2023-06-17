@@ -38,6 +38,24 @@ pub struct Config {
     #[arg(long = "smtp-key-path", env("MAILTUTAN_SMTP_KEY_PATH"))]
     pub smtp_key_path: Option<String>,
 
+    /// SMTP Auth Username
+    #[arg(
+        long = "smtp-auth-username",
+        env("MAILTUTAN_AUTH_USERNAME"),
+        requires = "smtp_key_path",
+        requires = "smtp_cert_path"
+    )]
+    pub smtp_auth_username: Option<String>,
+
+    /// SMTP Auth Password
+    #[arg(
+        long = "smtp-auth-password",
+        env("MAILTUTAN_AUTH_PASSWORD"),
+        requires = "smtp_key_path",
+        requires = "smtp_cert_path"
+    )]
+    pub smtp_auth_password: Option<String>,
+
     /// HTTP Auth
     #[arg(
         long = "http-auth",
@@ -106,6 +124,8 @@ impl Config {
             messages_limit: self.messages_limit,
             smtp_key_path: self.smtp_key_path.clone(),
             smtp_cert_path: self.smtp_cert_path.clone(),
+            smtp_auth_username: self.smtp_auth_username.clone(),
+            smtp_auth_password: self.smtp_auth_password.clone(),
         }
     }
 }
