@@ -11,6 +11,7 @@ This is a repository for Mailtutan, a SMTP server built in Rust. The server allo
 - Provides a web interface and REST API to view the list of emails.
 - Basic HTTP Authentication on web interface and REST API ( rfc7617 )
 - Supports multiple client connections simultaneously.
+- Supports encryption on transit (TLS) on SMTP
 - Supports real-time updates using WebSockets for the web interface.
 - Lightweight and efficient implementation in Rust. The docker image on docker hub is < 2MB.
 - Multiple storage options: Memory ( default ), Maildir ( in file )
@@ -53,6 +54,10 @@ Options:
           HTTP Port number [env: MAILTUTAN_HTTP_PORT=] [default: 1080]
       --smtp-port <SMTP_PORT>
           SMTP Port number [env: MAILTUTAN_SMTP_PORT=] [default: 1025]
+      --smtp-cert-path <SMTP_CERT_PATH>
+          SMTP Cert Path [env: MAILTUTAN_SMTP_CERT_PATH=]
+      --smtp-key-path <SMTP_KEY_PATH>
+          SMTP Key Path [env: MAILTUTAN_SMTP_KEY_PATH=]
       --http-auth
           HTTP Auth [env: MAILTUTAN_HTTP_AUTH=]
       --http-username <HTTP_USERNAME>

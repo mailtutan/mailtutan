@@ -30,6 +30,14 @@ pub struct Config {
     #[arg(long = "smtp-port", env("MAILTUTAN_SMTP_PORT"), default_value_t = 1025)]
     pub smtp_port: u16,
 
+    /// SMTP Cert Path
+    #[arg(long = "smtp-cert-path", env("MAILTUTAN_SMTP_CERT_PATH"))]
+    pub smtp_cert_path: Option<String>,
+
+    /// SMTP Key Path
+    #[arg(long = "smtp-key-path", env("MAILTUTAN_SMTP_KEY_PATH"))]
+    pub smtp_key_path: Option<String>,
+
     /// HTTP Auth
     #[arg(
         long = "http-auth",
@@ -96,6 +104,8 @@ impl Config {
             storage,
             ws_sender: broadcast::channel(100).0,
             messages_limit: self.messages_limit,
+            smtp_key_path: self.smtp_key_path.clone(),
+            smtp_cert_path: self.smtp_cert_path.clone(),
         }
     }
 }

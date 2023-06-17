@@ -21,6 +21,8 @@ pub struct Mailtutan {
     pub http_username: String,
     pub http_password: String,
     pub messages_limit: usize,
+    pub smtp_cert_path: Option<String>,
+    pub smtp_key_path: Option<String>,
 }
 
 impl Mailtutan {
