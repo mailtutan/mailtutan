@@ -997,6 +997,7 @@ dependencies = [
  "futures",
  "http-body",
  "mail-parser",
+ "mailin",
  "mailin-embedded",
  "once_cell",
  "serde",
