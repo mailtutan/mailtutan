@@ -19,7 +19,7 @@ impl Handler for MyHandler {
     }
 
     fn data_end(&mut self) -> mailin_embedded::Response {
-        let message = Message::from(&self.data);
+        let message = Message::from(&self.data).unwrap();
 
         let msg = APP
             .get()
