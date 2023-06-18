@@ -1,3 +1,7 @@
+#
+# Makefile
+# Just for making development convenient
+#
 
 all: build-web build-backend
 
