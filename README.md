@@ -21,7 +21,7 @@ This is a repository for Mailtutan, a SMTP server built in Rust. The server allo
 
 #### Compile from source
 ```
-git clone git@github.com:mailtutan/mailtutan.git
+git clone https://github.com/mailtutan/mailtutan.git
 cd mailtutan
 cargo build --release
 # executable will be available at ./target/release/mailtutan
