@@ -3,7 +3,7 @@
 # Just for making development convenient
 #
 
-all: build-web build-backend
+all: build-backend
 
 run:
 	cargo run -p mailtutan
@@ -13,7 +13,7 @@ build-backend:
 	strip target/release/mailtutan
 
 build-web:
-	(cd mailtutan-web && cargo build && trunk build --release)
+	(cd mailtutan-web && trunk build --release)
 
 trunk:
 	(cd mailtutan-web && trunk serve)
