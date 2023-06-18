@@ -1,14 +1,18 @@
+use anyhow::Context;
+use anyhow::Ok;
 use axum::{routing::delete, routing::get, Router};
 
 use crate::auth;
 use crate::APP;
+
+use anyhow::Result;
 
 mod assets;
 mod messages;
 mod version;
 mod websocket;
 
-pub async fn serve() {
+pub async fn serve() -> Result<()> {
     let app = Router::new()
         .route("/", get(assets::index_html))
         .route("/ws", get(websocket::websocket_handler))
@@ -30,19 +34,31 @@ pub async fn serve() {
         .route("/api/version", get(version::show));
 
     let app = {
-        if APP.get().unwrap().lock().unwrap().http_auth {
+        if APP
+            .get()
+            .context("accessing OnceCell")?
+            .lock()
+            .unwrap()
+            .http_auth
+        {
             app.route_layer(axum::middleware::from_fn(auth::basic))
         } else {
             app
         }
     };
 
-    let uri = APP.get().unwrap().lock().unwrap().get_api_uri();
+    let uri = APP
+        .get()
+        .context("accessing OnceCell")?
+        .lock()
+        .unwrap()
+        .get_api_uri();
 
     println!("listening on http://{}", uri);
 
-    axum::Server::bind(&uri.parse().unwrap())
+    axum::Server::bind(&uri.parse().context("parsing http uri")?)
         .serve(app.into_make_service())
-        .await
-        .unwrap();
+        .await?;
+
+    Ok(())
 }
