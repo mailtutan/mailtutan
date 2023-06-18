@@ -5,7 +5,7 @@ version = "0.3.0"
 edition = "2021"
 license = "MIT"
 readme = "README.md"
-keywords = ["email", "SMTP", "smtp-server", "web", "app", "webapp", "wasm", "webassembly"]
+keywords = ["email", "SMTP", "smtp-server", "wasm", "webassembly"]
 
 [profile.release]
 opt-level = 'z'
