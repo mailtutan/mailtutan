@@ -979,7 +979,7 @@ dependencies = [
 
 [[package]]
 name = "mailtutan"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "async-trait",
  "axum",
@@ -987,7 +987,7 @@ dependencies = [
  "clap",
  "futures",
  "mailin-embedded",
- "mailtutan-lib",
+ "mailtutan-lib 0.2.0",
  "serde",
  "serde_json",
  "tokio",
@@ -996,6 +996,26 @@ dependencies = [
 [[package]]
 name = "mailtutan-lib"
 version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2648138d17560af556608e8f23680148d909616e978b869c77739f8ee03e3cb5"
+dependencies = [
+ "async-trait",
+ "axum",
+ "chrono",
+ "futures",
+ "http-body",
+ "mail-parser",
+ "mailin-embedded",
+ "once_cell",
+ "serde",
+ "serde_json",
+ "tokio",
+ "uuid",
+]
+
+[[package]]
+name = "mailtutan-lib"
+version = "0.3.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1015,7 +1035,7 @@ dependencies = [
 
 [[package]]
 name = "mailtutan-web"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "futures",
  "gloo-dialogs",

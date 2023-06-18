@@ -1,7 +1,7 @@
 [workspace.package]
 authors = ["Mohsen Alizadeh <mohsen@alizadeh.us>"]
 homepage= "https://github.com/mailtutan/mailtutan"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 license = "MIT"
 readme = "README.md"
