@@ -1,3 +1,4 @@
+use anyhow::{Context, Result};
 use chrono::Local;
 use mail_parser;
 use serde::Serialize;
@@ -37,18 +38,18 @@ pub struct Attachment {
     pub body: Vec<u8>,
 }
 
-impl From<&Vec<u8>> for Message {
-    fn from(data: &Vec<u8>) -> Self {
+impl Message {
+    pub fn from(data: &Vec<u8>) -> Result<Self> {
         use mail_parser::HeaderValue;
 
-        let message = mail_parser::Message::parse(data.as_ref()).unwrap();
+        let message = mail_parser::Message::parse(data.as_ref()).context("parse message")?;
 
         let sender = {
             if let HeaderValue::Address(addr) = message.from() {
                 format!(
                     "{} {}",
-                    addr.name.as_ref().unwrap(),
-                    addr.address.as_ref().unwrap()
+                    addr.name.as_ref().context("parse sender name")?,
+                    addr.address.as_ref().context("parse sender address")?
                 )
             } else {
                 "".to_owned()
@@ -59,7 +60,10 @@ impl From<&Vec<u8>> for Message {
             let mut list: Vec<String> = vec![];
 
             if let HeaderValue::Address(addr) = message.to() {
-                list.push(format!("{}", addr.address.as_ref().unwrap()));
+                list.push(format!(
+                    "{}",
+                    addr.address.as_ref().context("parse recipient address")?
+                ));
             }
 
             list
@@ -95,7 +99,7 @@ impl From<&Vec<u8>> for Message {
             })
             .collect();
 
-        Self {
+        Ok(Self {
             id: None,
             sender,
             recipients,
@@ -106,7 +110,7 @@ impl From<&Vec<u8>> for Message {
             formats,
             html,
             plain,
-        }
+        })
     }
 }
 
@@ -126,7 +130,7 @@ mod test {
         .as_bytes()
         .to_vec();
 
-        let message = Message::from(&data);
+        let message = Message::from(&data).unwrap();
         assert_eq!(message.subject, "SMTP e-mail test");
     }
 
@@ -154,7 +158,7 @@ mod test {
         .as_bytes()
         .to_vec();
 
-        let message = Message::from(&data);
+        let message = Message::from(&data).unwrap();
         assert_eq!(message.subject, "This is a test email");
     }
 
@@ -181,7 +185,7 @@ mod test {
         .as_bytes()
         .to_vec();
 
-        let message = Message::from(&data);
+        let message = Message::from(&data).unwrap();
         assert_eq!(message.subject, "");
     }
 }

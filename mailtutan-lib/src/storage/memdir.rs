@@ -82,7 +82,7 @@ impl Storage for Memdir {
 
         let bytes = fs::read(self.path.join(filename)).unwrap();
 
-        let mut message = Message::from(&bytes);
+        let mut message = Message::from(&bytes).unwrap();
         message.id = Some(item);
 
         message
