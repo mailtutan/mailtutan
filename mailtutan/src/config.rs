@@ -1,10 +1,6 @@
 use clap::Parser;
 use clap::ValueEnum;
-use mailtutan_lib::storage::Memdir;
-use mailtutan_lib::storage::Storage;
-use mailtutan_lib::{storage::Memory, Mailtutan};
 use std::net::Ipv4Addr;
-use tokio::sync::broadcast;
 
 #[derive(Clone, Debug, ValueEnum)]
 pub enum StorageType {
@@ -99,33 +95,4 @@ pub struct Config {
         default_value = "maildir"
     )]
     pub maildir_path: String,
-}
-
-impl Config {
-    pub fn from_env_and_args() -> Self {
-        Self::parse()
-    }
-
-    pub fn build(&self) -> Mailtutan {
-        let storage: Box<dyn Storage + 'static> = match self.storage {
-            StorageType::Memory => Box::new(Memory::new(self.messages_limit)),
-            StorageType::Maildir => Box::new(Memdir::new(self.messages_limit, &self.maildir_path)),
-        };
-
-        Mailtutan {
-            ip: self.ip,
-            http_port: self.http_port,
-            smtp_port: self.smtp_port,
-            http_username: self.http_username.clone(),
-            http_password: self.http_password.clone(),
-            http_auth: self.http_auth,
-            storage,
-            ws_sender: broadcast::channel(100).0,
-            messages_limit: self.messages_limit,
-            smtp_key_path: self.smtp_key_path.clone(),
-            smtp_cert_path: self.smtp_cert_path.clone(),
-            smtp_auth_username: self.smtp_auth_username.clone(),
-            smtp_auth_password: self.smtp_auth_password.clone(),
-        }
-    }
 }

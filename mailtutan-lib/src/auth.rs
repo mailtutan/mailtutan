@@ -1,6 +1,7 @@
-use crate::APP;
 use axum::{headers::HeaderMapExt, response::IntoResponse};
 
+use crate::AppState;
+use axum::extract::State;
 use axum::{
     headers::authorization::{Authorization, Basic},
     http::Request,
@@ -8,22 +9,18 @@ use axum::{
     middleware::Next,
     response::Response,
 };
-pub async fn basic<B>(request: Request<B>, next: Next<B>) -> Response {
-    if let Some(credential) = request.headers().typed_get::<Authorization<Basic>>() {
-        if let Some(app) = APP.get() {
-            let valid = {
-                if let Ok(app) = app.lock() {
-                    app.http_username == credential.0.username()
-                        && app.http_password == credential.0.password()
-                } else {
-                    false
-                }
-            };
+use std::sync::Arc;
 
-            if valid {
-                let res = next.run(request).await;
-                return res;
-            }
+pub async fn basic<B>(
+    State(state): State<Arc<AppState>>,
+    request: Request<B>,
+    next: Next<B>,
+) -> Response {
+    if let Some(credential) = request.headers().typed_get::<Authorization<Basic>>() {
+        if state.http_auth_username == credential.0.username()
+            && state.http_auth_password == credential.0.password()
+        {
+            return next.run(request).await;
         }
     }
 
