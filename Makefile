@@ -13,7 +13,7 @@ build-backend:
 	strip target/release/mailtutan
 
 build-web:
-	(cd mailtutan-web && cargo build && trunk build --release)
+	(cd mailtutan-web && trunk build --release)
 	cp mailtutan-web/dist/* mailtutan-lib/dist/
 
 trunk:
