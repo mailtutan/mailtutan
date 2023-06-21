@@ -122,5 +122,5 @@ This project is licensed under the [MIT License](LICENSE.txt). Feel free to use,
 
 ## Acknowledgments
 
-- This project was inspired by the need for a lightweight fake SMTP server for testing and development purposes.
+- This project was inspired by Mailcatcher and the need for a lightweight SMTP server for testing and development purposes.
 - Thanks to the Rust programming language community for providing excellent tools and libraries for building efficient and reliable software.
