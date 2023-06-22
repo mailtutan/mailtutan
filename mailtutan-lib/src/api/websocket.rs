@@ -18,7 +18,7 @@ pub async fn websocket_handler(
 async fn websocket(stream: WebSocket, state: Arc<AppState>) {
     let (mut sender, _) = stream.split();
 
-    let mut rx = state.ws_sender.subscribe();
+    let mut rx = state.channel.subscribe();
 
     tokio::spawn(async move {
         while let Ok(msg) = rx.recv().await {
