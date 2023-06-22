@@ -20,7 +20,7 @@ pub async fn show_source(
     (
         StatusCode::OK,
         [("Content-Type", "text/plain;charset=utf-8")],
-        state.storage.read().unwrap().get(id).source.clone(),
+        state.storage.read().unwrap().get(id).source,
     )
 }
 
@@ -78,7 +78,7 @@ pub async fn show_eml(
     (
         StatusCode::OK,
         [("Content-Type", "message/rfc822")],
-        state.storage.read().unwrap().get(id).source.clone(),
+        state.storage.read().unwrap().get(id).source,
     )
 }
 
@@ -107,7 +107,7 @@ pub async fn download_attachment(
 }
 
 pub async fn show_json(Path(id): Path<usize>, State(state): State<Arc<AppState>>) -> Json<Message> {
-    Json(state.storage.read().unwrap().get(id).clone())
+    Json(state.storage.read().unwrap().get(id))
 }
 
 pub async fn delete_all(State(state): State<Arc<AppState>>) -> Html<&'static str> {

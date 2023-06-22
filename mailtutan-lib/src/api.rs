@@ -18,6 +18,12 @@ pub struct Builder {
     state: Option<Arc<AppState>>,
 }
 
+impl Default for Builder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 pub struct Server {
     router: Router,
     socket: SocketAddr,
@@ -25,7 +31,7 @@ pub struct Server {
 
 impl Server {
     pub async fn serve(self) -> Result<()> {
-        println!("listening on http://{}", self.socket.to_string());
+        println!("listening on http://{}", self.socket);
 
         axum::Server::bind(&self.socket)
             .serve(self.router.into_make_service())
@@ -85,10 +91,7 @@ impl Builder {
 
         let router = {
             if self.http_auth {
-                router.route_layer(axum::middleware::from_fn_with_state(
-                    state.clone(),
-                    auth::basic,
-                ))
+                router.route_layer(axum::middleware::from_fn_with_state(state, auth::basic))
             } else {
                 router
             }
