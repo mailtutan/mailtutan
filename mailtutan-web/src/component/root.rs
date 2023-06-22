@@ -103,7 +103,7 @@ pub fn Root() -> Html {
                 url
             };
 
-            let ws = WebSocket::open(&ws_url.to_string()).unwrap();
+            let ws = WebSocket::open(ws_url.as_ref()).unwrap();
 
             let (_, mut read) = ws.split();
 

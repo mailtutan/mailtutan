@@ -25,6 +25,12 @@ pub struct Builder {
     auth: bool,
 }
 
+impl Default for Builder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Builder {
     pub fn new() -> Self {
         Builder {
@@ -77,7 +83,7 @@ impl Builder {
             server.with_auth(AuthMechanism::Plain);
         }
 
-        println!("listening on smtp://{}", self.socket.unwrap().to_string());
+        println!("listening on smtp://{}", self.socket.unwrap());
 
         Server(server)
     }
