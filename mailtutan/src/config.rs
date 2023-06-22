@@ -95,4 +95,8 @@ pub struct Config {
         default_value = "maildir"
     )]
     pub maildir_path: String,
+
+    /// Web Hook
+    #[arg(long = "web-hook", env("MAILTUTAN_WEB_HOOK"))]
+    pub web_hook: Option<String>,
 }

@@ -20,3 +20,4 @@ chrono = { workspace = true }
 futures = "0.3.28"
 mailtutan-lib = { version = "0.3.0", path= "../mailtutan-lib" }
 clap = { version = "4.3.0", features = ["derive", "env"] }
+http = "0.2.9"
