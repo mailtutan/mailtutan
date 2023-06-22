@@ -11,7 +11,7 @@ use tokio::sync::broadcast::Sender;
 
 pub struct AppState {
     pub storage: Box<RwLock<dyn Storage + 'static>>,
-    pub ws_sender: Sender<String>,
+    pub channel: Sender<String>,
     pub messages_limit: usize,
     pub smtp_auth_username: Option<String>,
     pub smtp_auth_password: Option<String>,

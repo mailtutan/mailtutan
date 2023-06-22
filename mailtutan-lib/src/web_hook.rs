@@ -12,7 +12,7 @@ impl Worker {
     }
 
     pub async fn serve(self) {
-        let mut rx = self.state.ws_sender.subscribe();
+        let mut rx = self.state.channel.subscribe();
 
         while let Ok(msg) = rx.recv().await {
             if let Some(url) = &self.state.web_hook {

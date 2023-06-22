@@ -30,7 +30,7 @@ async fn main() {
         };
         Arc::new(AppState {
             storage,
-            ws_sender: broadcast::channel(100).0,
+            channel: broadcast::channel(100).0,
             messages_limit: config.messages_limit,
             smtp_auth_username: config.smtp_auth_username.clone(),
             smtp_auth_password: config.smtp_auth_password.clone(),

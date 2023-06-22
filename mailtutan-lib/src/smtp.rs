@@ -113,7 +113,7 @@ impl Handler for MyHandler {
         };
 
         self.state
-            .ws_sender
+            .channel
             .clone()
             .send(serde_json::to_string(&event).unwrap())
             .ok();
