@@ -36,6 +36,7 @@ async fn main() {
             smtp_auth_password: config.smtp_auth_password.clone(),
             http_auth_username: config.http_username,
             http_auth_password: config.http_password,
+            web_hook: config.web_hook,
         })
     };
 
@@ -46,16 +47,20 @@ async fn main() {
         .build();
 
     let smtp_server = smtp::Builder::new()
-        .with_state(state)
+        .with_state(state.clone())
         .with_ssl(config.smtp_cert_path, config.smtp_key_path)
         .with_auth(config.smtp_auth_username.is_some() && config.smtp_auth_password.is_some())
         .bind((config.ip, config.smtp_port).into())
         .build();
 
+    let web_hook_worker = web_hook::Worker::new(state.clone());
+
     tokio::select! {
         _ = runtime.spawn(api_server.serve()) => {
         }
         _ = runtime.spawn(smtp_server.serve()) => {
+        }
+        _ = runtime.spawn(web_hook_worker.serve()) => {
         }
         _ = signal::ctrl_c() => {
         }

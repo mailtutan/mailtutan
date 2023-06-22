@@ -3,6 +3,7 @@ pub mod auth;
 pub mod models;
 pub mod smtp;
 pub mod storage;
+pub mod web_hook;
 
 use std::sync::RwLock;
 use storage::Storage;
@@ -16,4 +17,5 @@ pub struct AppState {
     pub smtp_auth_password: Option<String>,
     pub http_auth_username: String,
     pub http_auth_password: String,
+    pub web_hook: Option<String>,
 }
