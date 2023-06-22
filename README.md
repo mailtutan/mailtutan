@@ -16,6 +16,7 @@ This is a repository for Mailtutan, a SMTP server built in Rust. The server allo
 - Lightweight and efficient implementation in Rust. The docker image on docker hub is < 2MB.
 - Multiple storage options: Memory ( default ), Maildir ( in file )
 - Supports SMTP Auth ( Plain )
+- Web Hooks
 
 ## Installation
 
@@ -83,11 +84,12 @@ Options:
           Storage [env: MAILTUTAN_STORAGE=] [default: memory] [possible values: memory, maildir]
       --maildir-path <MAILDIR_PATH>
           Storage [env: MAILTUTAN_MAILDIR_PATH=] [default: maildir]
+      --web-hook <WEB_HOOK>
+          Web Hook [env: MAILTUTAN_WEB_HOOK=]
   -h, --help
           Print help
   -V, --version
           Print version
-
 ```
 
 
