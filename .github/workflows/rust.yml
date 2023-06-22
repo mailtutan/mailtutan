@@ -19,14 +19,14 @@ jobs:
     # - name: Install Wasm32
     #   run: rustup target add wasm32-unknown-unknown
     #
-    # - name: Install Clippy
-    #   run: rustup component add clippy
+    - name: Install Clippy
+      run: rustup component add clippy
     #
     # - name: Install trunk
     #   run: cargo install --locked trunk
     #
-    # - name: Check Clipy
-    #   run: cargo clippy
+    - name: Check Clipy
+      run: cargo clippy
     #
     # - name: Build
     #   run: make all
