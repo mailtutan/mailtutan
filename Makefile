@@ -19,6 +19,11 @@ build-web:
 trunk:
 	(cd mailtutan-web && trunk serve)
 
+clean:
+	cargo clean
+	(cd mailtutan-web && trunk clean)
+	rm -rf mailtutan-lib/dist/*
+
 publish:
 	cargo publish -p mailtutan-web
 	cargo publish -p mailtutan-lib
