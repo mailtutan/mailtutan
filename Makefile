@@ -24,6 +24,7 @@ publish:
 	cargo publish -p mailtutan-lib
 	cargo publish -p mailtutan
 
+# FYI Get `toml` executable by `cargo install --locked toml-cli`
 VERSION := $(shell toml get Cargo.toml workspace.package.version --raw)
 
 docker-build:
