@@ -10,21 +10,21 @@ keywords.workspace = true
 description = "The Frontend developed for mailtutan project which is an SMTP server for test and development environments."
 
 [dependencies]
-yew = { version = "0.20.0", features = ["csr"] }
-yewdux = "0.9"
-serde_json = "1.0.81"
-gloo-net = "0.2"
-gloo-utils = "0.1.6"
-gloo-dialogs = "0.1.1"
+yew = { version = "0.21", features = ["csr"] }
+yewdux = "0.10"
+serde_json = "1"
+gloo-net = "0.5"
+gloo-utils = "0.2"
+gloo-dialogs = "0.2"
 serde = { version = "1.0", features = ["derive"] }
 wasm-bindgen-futures = "0.4"
-futures = "0.3.28"
-log = "0.4.6"
-wasm-logger = "0.2.0"
-url = "2.4.0"
+futures = "0.3"
+log = "0.4"
+wasm-logger = "0.2"
+url = "2.4"
 
 [dependencies.web-sys]
-version = "0.3.63"
+version = "0.3"
 features = [
 	"HtmlLiElement",
   "HtmlTableCellElement",
