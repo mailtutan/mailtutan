@@ -7,14 +7,9 @@ pub struct Props {
 
 #[function_component]
 pub fn Header(Props { clear_onclick }: &Props) -> Html {
-    let mailtutan: String = "MAILTUTAN"
-        .chars()
-        .map(|f| format!("{}{}", f, "\u{00a0}".repeat(5)))
-        .collect();
-
     html! {
         <header>
-        <h1>{ mailtutan }</h1>
+        <h1 class="main-title">{ "MAILTUTAN" }</h1>
         <nav class="app">
           <ul>
             <li class="search hidden"><input type="search" name="search" placeholder="Search messages..." incremental="true" /></li>
