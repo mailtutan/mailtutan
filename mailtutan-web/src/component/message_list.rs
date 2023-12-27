@@ -38,7 +38,7 @@ pub fn MessageList(Props { onclick }: &Props) -> Html {
         .collect::<Html>();
 
     html! {
-        <nav id="messages" style="height: 210px;">
+        <nav id="messages">
             <table>
               <thead>
                 <tr>

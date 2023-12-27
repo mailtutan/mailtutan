@@ -1,5 +1,5 @@
 use crate::State;
-use web_sys::{HtmlIFrameElement, HtmlLiElement};
+use web_sys::HtmlLiElement;
 use yew::prelude::*;
 use yewdux::prelude::*;
 
@@ -34,6 +34,7 @@ pub fn MessageView() -> Html {
         let selected_format = selected_format.clone();
 
         Callback::from(move |e: MouseEvent| {
+            e.prevent_default();
             let element: HtmlLiElement = e.target_unchecked_into();
             let format = element
                 .parent_element()
@@ -77,23 +78,6 @@ pub fn MessageView() -> Html {
         });
     }
 
-    let onload = {
-        Callback::from(move |e: Event| {
-            let element: HtmlIFrameElement = e.target_unchecked_into();
-
-            let h = element
-                .content_window()
-                .unwrap()
-                .document()
-                .unwrap()
-                .body()
-                .unwrap()
-                .scroll_height();
-
-            element.set_attribute("height", &h.to_string()).ok();
-        })
-    };
-
     let download_link = format!("/api/messages/{}/eml", message.id.unwrap());
 
     html! {
@@ -117,16 +101,16 @@ pub fn MessageView() -> Html {
                 { attachments }
             </dd>
           </dl>
-          <nav class="views">
-            <ul>
-              <li onclick={&onclick} class={tab_classes("html")} data-message-format="html"><a href="#">{ "HTML" }</a></li>
-              <li onclick={&onclick} class={tab_classes("plain")} data-message-format="plain"><a href="#">{ "Plain Text" }</a></li>
-              <li onclick={&onclick} class={tab_classes("source")} data-message-format="source"><a href="#">{ "Source" }</a></li>
-              <li class="format tab" data-message-format="html"><a href={ download_link }><span>{ "Download" }</span></a></li>
-            </ul>
-          </nav>
         </header>
-        <iframe {onload} scrolling="no" class="body" src={ iframe_src }></iframe>
+        <nav class="views">
+          <ul>
+            <li onclick={&onclick} class={tab_classes("html")} data-message-format="html"><a href="#">{ "HTML" }</a></li>
+            <li onclick={&onclick} class={tab_classes("plain")} data-message-format="plain"><a href="#">{ "Plain Text" }</a></li>
+            <li onclick={&onclick} class={tab_classes("source")} data-message-format="source"><a href="#">{ "Source" }</a></li>
+            <li class="format tab" data-message-format="html"><a href={ download_link } target="_new"><span>{ "Download" }</span></a></li>
+          </ul>
+        </nav>
+        <iframe class="body" src={ iframe_src }></iframe>
       </article>
     }
 }
