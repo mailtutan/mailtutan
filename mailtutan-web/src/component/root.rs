@@ -65,7 +65,8 @@ pub fn Root() -> Html {
     {
         let dispatch = dispatch.clone();
 
-        use_effect_with_deps(
+        use_effect_with(
+            (),
             move |_| {
                 // api::fetch_messages();
                 spawn_local(async move {
@@ -76,7 +77,6 @@ pub fn Root() -> Html {
                         .json()
                         .await
                         .unwrap();
-
                     dispatch.reduce_mut(|state| {
                         for message in fetched_messages {
                             state.messages.insert(message.id.unwrap(), message.clone());
@@ -84,7 +84,6 @@ pub fn Root() -> Html {
                     });
                 });
             },
-            (),
         );
     }
 

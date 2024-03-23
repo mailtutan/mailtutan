@@ -13,6 +13,7 @@ lto = true
 strip = true
 
 [workspace]
+resolver = "2"
 members = [
   "mailtutan",
   "mailtutan-lib",
@@ -20,5 +21,5 @@ members = [
 ]
 
 [workspace.dependencies]
-anyhow = "1.0.71"
-chrono = "0.4.26"
+anyhow = "1"
+chrono = "0.4"

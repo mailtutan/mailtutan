@@ -1,6 +1,8 @@
+use std::borrow::Cow;
+
 use anyhow::{Context, Result};
 use chrono::Local;
-use mail_parser;
+use mail_parser::{self, Addr};
 use serde::Serialize;
 use uuid::Uuid;
 
@@ -40,34 +42,26 @@ pub struct Attachment {
 
 impl Message {
     pub fn from(data: &Vec<u8>) -> Result<Self> {
-        use mail_parser::HeaderValue;
-
-        let message = mail_parser::Message::parse(data.as_ref()).context("parse message")?;
+        let message = mail_parser::MessageParser::default().parse(data).context("parse message")?;
 
         let sender = {
-            if let HeaderValue::Address(addr) = message.from() {
+            if let Some(Addr { name, address }) = (||message.from()?.first())() {
                 format!(
                     "{} {}",
-                    addr.name.as_ref().context("parse sender name")?,
-                    addr.address.as_ref().context("parse sender address")?
+                    name.as_ref().unwrap_or(&Cow::Borrowed("")),
+                    address.as_ref().context("parse sender address")?
                 )
             } else {
                 "".to_owned()
             }
         };
 
-        let recipients = {
-            let mut list: Vec<String> = vec![];
+        let recipients = (||message.to()?.as_list())()
+            .unwrap_or_default()
+            .iter()
+            .map(|addr| addr.address.as_ref().unwrap_or(&Cow::Borrowed("")).to_string())
+            .collect::<Vec<_>>();
 
-            if let HeaderValue::Address(addr) = message.to() {
-                list.push(format!(
-                    "{}",
-                    addr.address.as_ref().context("parse recipient address")?
-                ));
-            }
-
-            list
-        };
         let subject = message.subject().unwrap_or("").to_string();
 
         let mut formats = vec!["source".to_owned()];

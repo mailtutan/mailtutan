@@ -102,6 +102,12 @@ impl Handler for MyHandler {
         Ok(())
     }
 
+    fn mail(&mut self, _ip: std::net::IpAddr, _domain: &str, _from: &str) -> Response {
+        self.data.clear();
+
+        mailin_embedded::response::OK
+    }
+
     fn data_end(&mut self) -> mailin_embedded::Response {
         let message = Message::from(&self.data).unwrap();
 
