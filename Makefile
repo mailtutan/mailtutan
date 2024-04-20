@@ -28,9 +28,11 @@ publish:
 VERSION := $(shell toml get Cargo.toml workspace.package.version --raw)
 
 docker-build:
-	docker build . -t mailtutan/mailtutan:$(VERSION)
+	docker build -t mailtutan/mailtutan:$(VERSION) .
 
 docker-push:
-	docker tag mailtutan/mailtutan:$(VERSION) mailtutan/mailtutan:latest
-	docker push mailtutan/mailtutan:$(VERSION)
-	docker push mailtutan/mailtutan:latest
+	docker buildx build \
+		--platform linux/amd64,linux/arm64 \
+		-t mailtutan/mailtutan:$(VERSION) \
+		-t mailtutan/mailtutan:latest \
+		--push .
