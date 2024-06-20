@@ -13,6 +13,7 @@ pub struct Message {
     pub sender: String,
     pub recipients: Vec<String>,
     pub subject: String,
+    pub date: String,
     pub created_at: String,
     pub attachments: Vec<Attachment>,
     pub formats: Vec<String>,

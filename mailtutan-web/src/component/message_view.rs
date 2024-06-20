@@ -84,8 +84,8 @@ pub fn MessageView() -> Html {
       <article id="message">
         <header>
           <dl class="metadata">
-            <dt class="created_at">{ "Received" }</dt>
-            <dd class="created_at">{ &message.created_at }</dd>
+            <dt class="date">{ "Date" }</dt>
+            <dd class="date">{ &message.date }</dd>
 
             <dt class="from">{ "From" }</dt>
             <dd class="from">{ &message.sender }</dd>

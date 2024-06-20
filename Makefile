@@ -14,6 +14,7 @@ build-backend:
 
 build-web:
 	(cd mailtutan-web && trunk build --release)
+	mkdir -p mailtutan-lib/dist/
 	cp mailtutan-web/dist/* mailtutan-lib/dist/
 
 trunk:

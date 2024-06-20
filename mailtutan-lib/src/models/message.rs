@@ -12,6 +12,7 @@ pub struct Message {
     pub sender: String,
     pub recipients: Vec<String>,
     pub subject: String,
+    pub date: Option<String>,
     pub created_at: Option<String>,
     pub attachments: Vec<Attachment>,
     #[serde(skip_serializing)]
@@ -64,6 +65,8 @@ impl Message {
 
         let subject = message.subject().unwrap_or("").to_string();
 
+        let date = message.date().map(|date| date.to_rfc822());
+
         let mut formats = vec!["source".to_owned()];
         let mut html: Option<String> = None;
         let mut plain: Option<String> = None;
@@ -98,6 +101,7 @@ impl Message {
             sender,
             recipients,
             subject,
+            date,
             created_at: Some(Local::now().format("%Y-%m-%d %H:%M:%S").to_string()),
             attachments,
             source: data.to_owned(),

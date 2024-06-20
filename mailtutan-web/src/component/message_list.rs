@@ -31,7 +31,7 @@ pub fn MessageList(Props { onclick }: &Props) -> Html {
                     <td name={ "mohsen" }>{ &message.sender }</td>
                     <td>{ &message.recipients.join(",") }</td>
                     <td>{ &message.subject }</td>
-                    <td>{ &message.created_at }</td>
+                    <td>{ &message.date }</td>
                 </tr>
             }
         })
@@ -45,7 +45,7 @@ pub fn MessageList(Props { onclick }: &Props) -> Html {
                   <th>{ "From" }</th>
                   <th>{ "To" }</th>
                   <th>{ "Subject" }</th>
-                  <th>{ "Received" }</th>
+                  <th>{ "Date" }</th>
                 </tr>
               </thead>
               <tbody>
