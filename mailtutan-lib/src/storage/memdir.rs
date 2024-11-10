@@ -80,7 +80,10 @@ impl Storage for Memdir {
     fn get(&self, item: usize) -> Message {
         let filename = format!("{}.eml", item);
 
-        let bytes = fs::read(self.path.join(filename)).unwrap();
+        let bytes = match fs::read(self.path.join(filename)) {
+            Ok(bytes) => bytes,
+            Err(_) => b"message not found".to_vec(),
+        };
 
         let mut message = Message::from(&bytes).unwrap();
         message.id = Some(item);
