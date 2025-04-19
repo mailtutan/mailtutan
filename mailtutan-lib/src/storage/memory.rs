@@ -21,13 +21,7 @@ impl Memory {
 
 impl Storage for Memory {
     fn list(&self) -> Vec<Message> {
-        let mut list: Vec<Message> = vec![];
-
-        for record in self.records.values() {
-            list.push(record.clone());
-        }
-
-        list
+        self.records.values().cloned().collect()
     }
 
     fn add(&mut self, mut message: Message) -> Message {
@@ -45,12 +39,12 @@ impl Storage for Memory {
         message
     }
 
-    fn get(&self, item: usize) -> Message {
-        self.records.get(&item).unwrap().clone()
+    fn get(&self, item: usize) -> Option<Message> {
+        self.records.get(&item).cloned()
     }
 
     fn remove(&mut self, item: usize) {
-        self.records.remove(&item).unwrap();
+        self.records.remove(&item);
     }
 
     fn size(&self) -> usize {
